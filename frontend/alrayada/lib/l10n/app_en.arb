@@ -1,0 +1,349 @@
+{
+  "categories": "Categories",
+  "shopping_cart": "Cart",
+  "home": "Home",
+  "account": "Account",
+  "no_data": "There is no data.",
+  "add_to_cart": "Add to cart",
+  "add_to_wishlist": "Wishlist",
+  "description": "Description",
+  "short_description": "Short description",
+  "edit": "Edit",
+  "update": "Update",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "checkout": "Checkout",
+  "confirm": "Confirm",
+  "you_need_to_login_first": "You need to log in first.",
+  "not_authenticated": "Not authenticated",
+  "ok": "Ok",
+  "not_activated": "Not activated!",
+  "your_account_need_to_be_activated": "Your account need to be activated",
+  "order_notes": "Order notes",
+  "you_are_about_to_create_order": "You are about to create an order!",
+  "order_total": "Total",
+  "sign_in": "Sign in",
+  "sign_up": "Sign up",
+  "logout": "Logout",
+  "authentication": "Authentication",
+  "welcome_again": "Welcome again!",
+  "register_account": "Register account",
+  "enter_the_account_credentials_to_continue": "Enter the account credentials to continue",
+  "email_address": "Email address",
+  "password": "Password",
+  "confirm_password": "Confirm password",
+  "lab_phone_number": "Lab phone",
+  "lab_owner_phone_number": "Owner phone",
+  "lab_name": "Lab name",
+  "lab_owner_name": "Lab owner name",
+  "city": "City",
+  "selected_city": "Selected city {city}",
+  "@selected_city": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "city": {
+        "type": "String",
+        "example": "Baghdad"
+      }
+    }
+  },
+  "forgot_password": "Forgot password?",
+  "reset_password": "Reset password",
+  "dont_have_account_yet": "Don't have account yet?",
+  "already_have_account": "Already have account?",
+  "search": "Search",
+  "submit": "Submit",
+  "field_should_not_be_empty": "Field should not be empty.",
+  "email_address_is_empty": "Email address is empty.",
+  "please_enter_valid_email_address": "Please enter valid email address.",
+  "password_should_not_be_empty": "Password should not be empty.",
+  "password_should_be_at_least_8_chars": "Password should be at least 8 characters.",
+  "password_should_be_less_than_128_chars": "Password should be less than 128 characters",
+  "password_must_contain_at_least_one_uppercase_character": "Password must contain at least one uppercase character.",
+  "password_must_contain_at_least_one_lowercase_character": "Password must contain at least one lowercase character.",
+  "password_must_contain_at_least_one_digit": "Password must contain at least one digit.",
+  "password_must_contain_at_least_one_special_character": "Password must contain at least one special character (e.g., ! @ # $ %)",
+  "password_should_be_strong": "Password should be strong.",
+  "confirm_password_does_not_match": "Confirm password does not match",
+  "phone_number_should_not_be_empty": "Phone number is required",
+  "phone_number_must_be_valid": "Phone number must 11 digits (07*********)",
+  "update_password": "Update password",
+  "current_password": "Current password",
+  "new_password": "New password",
+  "account_data": "Account data",
+  "update_all_of_your_data": "Update all of your data",
+  "orders": "Orders",
+  "view_all_of_your_orders": "View all of your orders, you can cancel any order that hasn't approved or rejected yet",
+  "favorites": "Favorites",
+  "view_all_of_your_wishlist": "View all of your wishlist",
+  "privacy_policy": "Privacy policy",
+  "open_privacy_policy_page": "Open our privacy policy page",
+  "social_media": "Social media",
+  "follow_us_on_social_media": "Follow us on social media accounts",
+  "settings": "Settings",
+  "select_your_preferences": "Select your preferences",
+  "welcome_again_with_lab_name": "Welcome again, {labName}",
+  "@welcome_again_with_lab_name": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "labName": {
+        "type": "String",
+        "example": "AlAula"
+      }
+    }
+  },
+  "joined_in_with_date": "Join in {date}",
+  "@joined_in_with_date": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "2020/9/25"
+      }
+    }
+  },
+  "success": "Success!",
+  "error": "Error!",
+  "data_has_been_successfully_updated": "Data has been successfully updated!",
+  "order_has_been_created": "Order has been created.",
+  "open_products_list_page": "Open products list page",
+  "support": "Support",
+  "guest_user": "Guest user",
+  "animations": "Animations",
+  "animations_details_settings_details": "Enable it if you want fancy animations in the app",
+  "confirm_delete_cart_item": "Confirm delete cart item",
+  "confirm_delete_cart_item_settings_details": "When you delete a product from the cart, should we confirm the delete process by displaying a dialog?",
+  "clear_cart_after_checkout": "Clear cart after checkout",
+  "clear_cart_after_checkout_settings_details": "After perform checkout and the order successfully created, should the shopping cart cleared?",
+  "force_use_scrollable_chart": "Force use scrollable chart",
+  "force_use_scrollable_chart_settings_details": "The chart by default is scrollable for smaller screens, check this if you want to make it scrollable no matter what",
+  "prefer_numbers_in_chart_months": "Prefer numbers in chart months",
+  "prefer_numbers_in_chart_months_settings_details": "Use the number of the month instead of first 3 characters of the month",
+  "un_focus_after_send_message": "UnFocus after send a chat message",
+  "un_focus_after_send_message_settings_details": "After send message using the send button, should we hide the keyboard?",
+  "use_classic_message_bubble": "Use classic message bubble",
+  "use_classic_message_bubble_settings_details": "In the support, should the app use the classic message bubble for each message item?",
+  "statistics": "Statistics",
+  "reset_favorites": "Reset favorites",
+  "developed_by_with_developer_name": "Developed by {developerName}",
+  "@developed_by_with_developer_name": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "developerName": {
+        "type": "String",
+        "example": "Ahmed Hnewa"
+      }
+    }
+  },
+  "account_created": "Account created",
+  "account_created_but": "Account has been successfully created, we will need to review your information's and after that you can shop from our app, to login, you will have to verify your email address by the link that we have sent to you",
+  "unknown_error": "Unknown error",
+  "unknown_error_with_msg": "Unknown error: {error}",
+  "@unknown_error_with_msg": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unhandled error"
+      }
+    }
+  },
+  "auth_too_many_failed_attempts": "Too many failed attempts, Please try again later.",
+  "incorrect_password": "Incorrect password.",
+  "auth_email_not_found": "Email not found. Please check your email address and try again.",
+  "auth_email_already_in_use": "Email already in use. Please use a different email or try logging in.",
+  "create_new_account": "Create new account",
+  "auth_are_you_sure_want_to_continue_create_account": "Are you sure want to continue? you will need to confirm your email address to login, and waiting until your account approved before you can shop from the app",
+  "auth_email_verification_has_not_sent_error": "An error occurred while sending the email verification link, please try again by sign in or try to contact us",
+  "verification_link_is_already_sent_with_minutes_to_expire": "Verification link is already sent, it will expire after {number} minutes.",
+  "@verification_link_is_already_sent_with_minutes_to_expire": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "25"
+      }
+    }
+  },
+  "or_sign_in_using_social_media_account": "Or sign in using social media account",
+  "delete_account": "Delete account",
+  "confirm_delete_account": "Confirm delete account",
+  "auth_account_delete_confirmation": "To confirm delete your account, please enter \"Delete\" in the text input without the double quotes to confirm the delete process",
+  "refresh": "Refresh",
+  "try_again": "Try again",
+  "common": "Common",
+  "general": "General",
+  "theme_mode": "Theme mode",
+  "theme_mode_settings_details": "Choose if you want dark or light theme, or use the default system mode",
+  "dark": "Dark",
+  "light": "Light",
+  "system": "System",
+  "clear": "Clear",
+  "clear_preferences": "Clear preferences",
+  "under_development": "Under development",
+  "offers_of_the_month": "Offers of the month",
+  "offers_pictures": "Pictures of the month's offers",
+  "next": "Next",
+  "skip": "Skip",
+  "get_started": "Get started",
+  "online_shopping_made_easy_feature": "Online shopping made easy",
+  "online_shopping_made_easy_feature_details": "Shop from the comfort of your own home with just a few taps",
+  "secure_shopping_experience_feature": "Secure shopping experience",
+  "secure_shopping_experience_feature_details": "Shop with confidence knowing that your personal information is safe and secure",
+  "favorites_wishlist_feature": "Favorites wishlist",
+  "favorites_wishlist_feature_details": "Save your favorite items for later use and quickly access it each time",
+  "easy_filtering_and_searching_feature": "Easy filtering and searching",
+  "easy_filtering_and_searching_feature_details": "Find exactly what you're looking for with our easy-to-use filtering and searching functionality",
+  "social_authentication_feature": "Social authentication",
+  "social_authentication_feature_details": "Sign up or log in with your favorite social media platform for a seamless shopping experience",
+  "fast_shipping_feature": "Fast shipping",
+  "fast_shipping_feature_details": "Get your items delivered to your lab quickly and reliably",
+  "in_app_support_chat_feature": "In-app support chat",
+  "in_app_support_chat_feature_details": "Get help and support from our friendly customer service team without ever leaving the app",
+  "under_development_feature": "Under development",
+  "under_development_feature_details": "Thank you for using our app! Please note that we are still working hard to improve your experience",
+  "no": "No",
+  "yes": "Yes",
+  "close_the_app": "Close the app",
+  "close_the_app_msg": "Are you sure you want to exit the app?",
+  "notifications": "Notifications",
+  "notifications_permission_title": "Allow Notifications",
+  "notifications_permission_message": "We'd like to send you important updates and reminders. To receive notifications, please enable notification permissions for this app. You can do this in your device settings. Thank you!",
+  "order_with_other_number": "Order #{orderNumber}",
+  "@order_with_other_number": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "orderNumber": {
+        "type": "String",
+        "example": "53232"
+      }
+    }
+  },
+  "cancel_order_with_order_number": "Order #{orderNumber}",
+  "@cancel_order_with_order_number": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "orderNumber": {
+        "type": "String",
+        "example": "53232"
+      }
+    }
+  },
+  "are_you_sure_want_to_cancel_order": "Are you sure want to cancel the order?",
+  "order_items": "Order items",
+  "last_update_in_with_date": "Last update in {formattedDate}",
+  "@last_update_in_with_date": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "formattedDate": {
+        "type": "String",
+        "example": "April 12, 2023 9:32 PM"
+      }
+    }
+  },
+  "admin_notes": "Admin notes",
+  "notes": "Notes",
+  "quantity": "Quantity",
+  "price": "Price",
+  "name": "Name",
+  "your_order_will_be_delivered_on_with_delivery_date": "Your order will be delivered on {deliveryDate}",
+  "@your_order_will_be_delivered_on_with_delivery_date": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "deliveryDate": {
+        "type": "String",
+        "example": "AM 12:04 2023/4/7"
+      }
+    }
+  },
+  "order_total_with_price": "Order total: {orderTotalPrice}",
+  "@order_total_with_price": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "orderTotalPrice": {
+        "type": "String",
+        "example": "500.00$"
+      }
+    }
+  },
+  "order_total_before_discounts_with_price": "Order total before discounts: {orderTotalPrice}",
+  "@order_total_before_discounts_with_price": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "orderTotalPrice": {
+        "type": "String",
+        "example": "600.00$"
+      }
+    }
+  },
+  "best_selling_products": "Best selling",
+  "newest_products": "Newest products",
+  "show_more": "Show more",
+  "message": "Message",
+  "enter_your_message_here": "Enter your message here",
+  "close": "Close",
+  "are_you_sure_you_want_to_remove_cart_item": "Are you sure you want remove the cart item?",
+  "remove_cart_item": "Removing cart item",
+  "please_check_your_internet_connection_msg": "Please check your internet connection and try again.",
+  "server_limit_error_msg": "Sorry but the server have limit when connect to it",
+  "server_limit_error_title": "Too many requests",
+  "payment_method": "Payment method",
+  "pay_order_msg": "Pay",
+  "order_has_paid_msg": "Thank you for your payment! Your order status has been changed to process.",
+  "privacy_policy_text": "We respect your privacy and we don't collect any personal data through our app. We don't require you to create an account, provide any personal information or share any data with us. We don't track your location or use cookies to monitor your activity. We don't sell, trade or share any information with third parties. We only use the information that is necessary to operate the app and provide you with the best user experience possible. If you have any questions about our privacy policy or how we handle your data, please contact us at support@alrayada.net.",
+  "app_name": "Alrayada",
+  "product_images": "Product images",
+  "product": "Product",
+  "category_images": "Category images",
+  "category": "Category",
+  "about_app": "About app",
+  "data": "Data",
+  "auth_screen": "Auth screen",
+  "auth_screen_form_inputs": "Auth screen form inputs",
+  "google_icon": "Google icon",
+  "facebook_icon": "Facebook icon",
+  "login_with_google": "Login with google",
+  "login_with_facebook": "Login with facebook",
+  "login_with_apple": "Login with apple",
+  "item": "Item",
+  "welcome_screen": "Welcome screen",
+  "transaction_of_order_not_paid_msg": "The transaction for this order hasn't been paid.",
+  "congratulations_you_have_saved_with_price": "Congratulations! You have saved {savedMoney} dollar",
+  "@congratulations_you_have_saved_with_price": {
+    "description": "A message with a single parameter",
+    "placeholders": {
+      "savedMoney": {
+        "type": "String",
+        "example": "600.00$"
+      }
+    }
+  },
+  "zain_cash": "Zain Cash",
+  "credit_card": "Credit Card",
+  "cash": "Cash",
+  "unknown": "Unknown",
+  "page_not_found": "Page Not Found",
+  "this_page_cant_be_found_msg": "This page can't be found, please get in touch with us if you believe this is a mistake.",
+  "baghdad": "Baghdad",
+  "basra": "Basra",
+  "maysan": "Maysan",
+  "dhiQar": "DhiQar",
+  "diyala": "Diyala",
+  "karbala": "Karbala",
+  "kirkuk": "Kirkuk",
+  "najaf": "Najaf",
+  "nineveh": "Nineveh",
+  "wasit": "Wasit",
+  "anbar": "Anbar",
+  "salahAlDin": "SalahAlDin",
+  "babil": "Babil",
+  "babylon": "Babylon",
+  "alMuthanna": "AlMuthanna",
+  "alQadisiyyah": "Al-Qadisiyyah",
+  "thiQar": "ThiQar",
+  "show_order_item_notes": "Show Order Item Notes",
+  "show_order_item_notes_settings_details": "When you view the details of the order item, should the app show you the notes of each item in the table?",
+  "empty": "Empty",
+  "sorry_this_feature_is_not_available_at_the_moment": "Sorry, this feature is not available at the moment",
+  "auto_detect": "Auto detect"
+}

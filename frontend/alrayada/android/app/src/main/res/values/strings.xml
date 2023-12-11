@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="application_name">Alrayada</string>
+    <string name="default_notification_channel_id" translatable="false">0</string>
+    <string name="facebook_app_id" translatable="false">914318679851601</string>
+    <string name="facebook_client_token" translatable="false">839891a2d2570ba510fea5c4765b4554</string>
+    <string name="in_app_update_download_successful_msg">Download successful, restarting in 5 seconds.</string>
+    <string name="choose_one">Choose one</string>
+</resources>

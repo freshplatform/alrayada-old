@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="application_name">الريادة</string>
+    <string name="in_app_update_download_successful_msg">تم تحميل التحديث بنجاح، سيتم إعادة التشغيل في غضون ٥ ثواني</string>
+    <string name="choose_one" translatable="false">اختر واحد</string>
+</resources>
