@@ -1,21 +1,20 @@
-val ktorVersion: String by project
-val kotlinVersion: String by project
-val logbackVersion: String by project
-val kmongoVersion: String by project
-val koinVersion: String by project
-val koinKtorVersion: String by project
+val kotlinVersion: String = libs.versions.kotlin.get()
+val ktorVersion: String = libs.versions.kotlin.get()
+val logbackVersion: String = libs.versions.logback.get()
+val kmongoVersion: String = libs.versions.kmongo.get()
+val koinVersion: String = libs.versions.koin.get()
+val koinKtorVersion: String = libs.versions.koinKtor.get()
 
 plugins {
-    kotlin("jvm") version "1.9.10"
-    id("io.ktor.plugin") version "2.3.3"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
+    kotlin("jvm") version libs.versions.kotlin.get()
+    id("io.ktor.plugin") version libs.versions.ktor.get()
+    id("org.jetbrains.kotlin.plugin.serialization") version libs.versions.kotlin.get()
 }
 
-group = "com.ahmedhnewa"
+group = "net.freshplatform"
 version = "0.0.1"
 application {
-//    mainClass.set("io.ktor.server.netty.EngineMain")
-    mainClass.set("com.ahmedhnewa.ApplicationKt")
+    mainClass.set("net.freshplatform.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -94,160 +93,16 @@ dependencies {
     sshAntTask("org.apache.ant:ant-jsch:1.10.13")
 }
 
-val buildingJarFileName = "temp-server.jar"
-val startingJarFileName = "server.jar"
-
-val serverUser = "root"
-val serverHost = "193.23.160.48"
-val serverSshKey = file("keys/id_rsa")
-val deleteLog = true
-val lockFileName = ".serverLock"
-
-val serviceName = "ktor-server"
-val serverFolderName = "app"
-
 ktor {
     fatJar {
-        archiveFileName.set(buildingJarFileName)
-    }
-}
-
-ant.withGroovyBuilder {
-    "taskdef"(
-        "name" to "scp",
-        "classname" to "org.apache.tools.ant.taskdefs.optional.ssh.Scp",
-        "classpath" to configurations["sshAntTask"].asPath
-    )
-    "taskdef"(
-        "name" to "ssh",
-        "classname" to "org.apache.tools.ant.taskdefs.optional.ssh.SSHExec",
-        "classpath" to configurations["sshAntTask"].asPath
-    )
-}
-
-fun sudoIfNeeded(): String {
-    if (serverUser.trim() == "root") {
-        return ""
-    }
-    return "sudo "
-}
-
-fun runSshCommand(command: String, knownHosts: File) = ant.withGroovyBuilder {
-    "ssh"(
-        "host" to serverHost,
-        "username" to serverUser,
-        "keyfile" to serverSshKey,
-        "trust" to true,
-        "knownhosts" to knownHosts,
-        "command" to command
-    )
-}
-
-task("cleanAndDeploy") {
-    dependsOn("clean", "deploy")
-}
-
-task("deploy") {
-    dependsOn("buildFatJar")
-    ant.withGroovyBuilder {
-        doLast {
-            val knownHosts = File.createTempFile("knownhosts", "txt")
-            try {
-                println("Make sure the $serverFolderName folder exists if doesn't")
-                runSshCommand(
-                    "mkdir -p \$HOME/$serverFolderName",
-                    knownHosts
-                )
-                println("Lock the server requests...")
-                runSshCommand(
-                    "touch \$HOME/$serverFolderName/$lockFileName",
-                    knownHosts
-                )
-                println("Deleting the previous building jar file if exists...")
-                runSshCommand(
-                    "rm \$HOME/$serverFolderName/$buildingJarFileName -f",
-                    knownHosts
-                )
-                println("Uploading the new jar file...")
-                val file = file("build/libs/$buildingJarFileName")
-                "scp"(
-                    "file" to file,
-                    "todir" to "$serverUser@$serverHost:/\$HOME/$serverFolderName",
-                    "keyfile" to serverSshKey,
-                    "trust" to true,
-                    "knownhosts" to knownHosts
-                )
-                println("Upload done, attempt to stop the current ktor server...")
-                runSshCommand(
-                    "${sudoIfNeeded()}systemctl stop $serviceName",
-                    knownHosts
-                )
-                println("Server stopped, attempt to delete the current ktor server jar...")
-                runSshCommand(
-                    "rm \$HOME/$serverFolderName/$startingJarFileName -f",
-                    knownHosts,
-                )
-                println("The old ktor server jar file has been deleted, now let's rename the new jar file")
-                runSshCommand(
-                    "mv \$HOME/$serverFolderName/$buildingJarFileName \$HOME/$serverFolderName/$startingJarFileName",
-                    knownHosts
-                )
-                if (deleteLog) {
-                    runSshCommand(
-                        "rm /var/log/$serviceName.log -f",
-                        knownHosts
-                    )
-                    println("The $serviceName log at /var/log/$serviceName.log has been removed")
-                }
-                println("Unlock the server requests...")
-                runSshCommand(
-                    "rm \$HOME/$serverFolderName/$lockFileName -f",
-                    knownHosts
-                )
-                println("Now let's start the ktor server service!")
-                runSshCommand(
-                    "${sudoIfNeeded()}systemctl start $serviceName",
-                    knownHosts
-                )
-                println("Done!")
-            } catch (e: Exception) {
-                println("Error: ${e.message}")
-            } finally {
-                knownHosts.delete()
-            }
-        }
-    }
-}
-
-task("upgrade") {
-    ant.withGroovyBuilder {
-        doLast {
-            val knownHosts = File.createTempFile("knownhosts", "txt")
-            try {
-                println("Update repositories...")
-                runSshCommand(
-                    "${sudoIfNeeded()}apt update",
-                    knownHosts
-                )
-                println("Update packages...")
-                runSshCommand(
-                    "${sudoIfNeeded()}apt upgrade -y",
-                    knownHosts
-                )
-                println("Done")
-            } catch (e: Exception) {
-                println("Error while upgrading server packages: ${e.message}")
-            } finally {
-                knownHosts.delete()
-            }
-        }
+        archiveFileName.set("app.jar")
     }
 }
 
 abstract class ProjectNameTask : DefaultTask() {
 
     @TaskAction
-    fun greet() = println("The project name is ${project.name}")
+    fun printProjectName() = println("The project name is ${project.name}")
 }
 
 tasks.register<ProjectNameTask>("projectName")
