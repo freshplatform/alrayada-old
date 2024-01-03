@@ -4,7 +4,7 @@ import net.freshplatform.data.order.*
 import net.freshplatform.data.product.ProductDataSource
 import net.freshplatform.data.user.UserData
 import net.freshplatform.data.user.UserDataSource
-import net.freshplatform.services.security.payment_methods.PaymentExceptionException
+import net.freshplatform.services.security.payment_methods.PaymentMethodException
 import net.freshplatform.services.security.payment_methods.PaymentMethodsService
 import net.freshplatform.services.security.payment_methods.zain_cash.ZainCashPaymentResponse
 import net.freshplatform.services.telegram.TelegramBotService
@@ -139,7 +139,7 @@ class OrderRoutes(
                         paymentMethodData["transactionId"] = data.id
                         paymentMethodData["payUrl"] =
                             "${PaymentMethodsConstants.ZainCash.configurations.url}transaction/pay?id=$transactionId"
-                    } catch (e: PaymentExceptionException) {
+                    } catch (e: PaymentMethodException) {
                         call.respondJsonText(HttpStatusCode.InternalServerError, e.message.toString())
                         return@post
                     }

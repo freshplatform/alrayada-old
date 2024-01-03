@@ -23,7 +23,7 @@ object Constants {
 
     const val DESCRIPTION = "Alrayada app website"
     const val SUPPORT_EMAIL = "support@$DOMAIN_NAME"
-    const val DEVELOPER_WEBSITE = "https://ahmedhnewa.com"
+    const val DEVELOPER_WEBSITE = "https://freshplatform.net"
 
     const val DEFAULT_DOLLAR_IN_DINAR = 1500
 

@@ -17,7 +17,7 @@ import net.freshplatform.routes.chat.ChatRoomController
 import net.freshplatform.services.mail.JavaMailSenderService
 import net.freshplatform.services.mail.MailSenderService
 import net.freshplatform.services.notifications.NotificationService
-import net.freshplatform.services.notifications.fcm.KtorFcmNotificationService
+import net.freshplatform.services.notifications.one_signal.KtorOneSignalNotificationService
 import net.freshplatform.services.secret_variables.SecretVariablesName
 import net.freshplatform.services.secret_variables.SecretVariablesService
 import net.freshplatform.services.security.hashing.HashingService
@@ -78,8 +78,8 @@ val servicesModule = module {
         KtorTelegramBotService()
     }
     single<NotificationService> {
-//        KtorOneSignalNotificationService()
-        KtorFcmNotificationService()
+        KtorOneSignalNotificationService()
+//        KtorFcmNotificationService()
     }
     single<SocialAuthenticationService> {
         SocialAuthenticationServiceImpl()

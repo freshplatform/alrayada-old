@@ -55,7 +55,7 @@ object PaymentMethodsConstants {
         ): String = JWT.create()
             .withClaim(
                 "amount",
-                amountInDollars * ((SecretVariablesService.javaSystemEnvironment().getString(
+                amountInDollars * ((SecretVariablesService.getString(
                     SecretVariablesName.DollarInDinar,
                     Constants.DEFAULT_DOLLAR_IN_DINAR.toString()
                 )).toIntOrNull()

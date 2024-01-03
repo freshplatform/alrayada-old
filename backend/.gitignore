@@ -40,9 +40,8 @@ out/
 files/*
 files/images/
 /src/main/resources/firebaseServiceAccountKey.json
-keys/
 .env
 
 /src/main/resources/static/*
 !/src/main/resources/static/style.css
-error.txt
+.kotlin

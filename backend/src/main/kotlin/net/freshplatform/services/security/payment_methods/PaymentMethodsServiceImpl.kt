@@ -15,7 +15,7 @@ import java.util.*
 class PaymentMethodsServiceImpl(
     private val client: HttpClient = HttpService.client
 ) : PaymentMethodsService {
-    @Throws(PaymentExceptionException::class)
+    @Throws(PaymentMethodException::class)
     override suspend fun processPayment(
         paymentMethod: PaymentMethod,
         paymentData: Map<String, Any>,
@@ -43,7 +43,7 @@ class PaymentMethodsServiceImpl(
                     return response.body<ZainCashPaymentResponse>()
                 } catch (e: Exception) {
                     println(e.message)
-                    throw PaymentExceptionException(e.message.toString())
+                    throw PaymentMethodException(e.message.toString())
                 }
             }
 

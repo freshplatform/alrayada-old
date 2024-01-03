@@ -1,5 +1,9 @@
 package net.freshplatform
 
+import io.github.cdimascio.dotenv.dotenv
+import io.ktor.server.application.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import net.freshplatform.di.dependencyInjection
 import net.freshplatform.plugins.*
 import net.freshplatform.services.secret_variables.SecretVariablesName
@@ -8,14 +12,6 @@ import net.freshplatform.utils.constants.Constants
 import net.freshplatform.utils.extensions.getUserWorkingDirectory
 import net.freshplatform.utils.extensions.isProductionMode
 import net.freshplatform.utils.extensions.isProductionServer
-import io.github.cdimascio.dotenv.dotenv
-import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import kotlin.time.Duration.Companion.seconds
-
-//fun main(args: Array<String>): Unit =
-//    io.ktor.server.netty.EngineMain.main(args)
 
 val appDotenv = dotenv {
     ignoreIfMissing = true
@@ -30,7 +26,6 @@ fun main() {
                 SecretVariablesService.getString(
                     SecretVariablesName.ServerPort, Constants.DEFAULT_SERVER_PORT.toString()
                 ).toInt()
-            println("Server is running on port $serverPort")
 
             developmentMode =
                 SecretVariablesService.getString(SecretVariablesName.ServerDevelopmentMode, "true").toBoolean()
@@ -41,16 +36,6 @@ fun main() {
             module(Application::module)
         },
     )
-    if (isProductionServer() && isProductionMode()) {
-        Runtime.getRuntime().addShutdownHook(Thread {
-            val delay = 5.seconds
-            println("Shutdown the server in ${delay.inWholeSeconds} sec...")
-            server.stop(
-                delay.inWholeMilliseconds,
-                delay.inWholeMilliseconds
-            ) // Gracefully stop the server when the JVM shuts down
-        })
-    }
     val serverBaseUrl = server.environment.connectors
         .first()
         .let { connector ->
@@ -65,11 +50,10 @@ fun main() {
 
 }
 
-//@Suppress("unused")
 fun Application.module() {
     val serverDevelopmentMode = environment.developmentMode
     println("User directory = ${getUserWorkingDirectory()}")
-    println("Server Development mode enable = $serverDevelopmentMode")
+    println("Server Development mode = $serverDevelopmentMode")
     println("Production mode = ${isProductionMode()}")
     println("Production server = ${isProductionServer()}")
 

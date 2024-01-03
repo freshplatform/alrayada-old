@@ -25,14 +25,16 @@ class KtorFcmNotificationService(
 
     companion object {
         private const val URL = "https://fcm.googleapis.com/v1/projects/${Constants.FIREBASE_PROJECT_ID}/messages:send"
+
         @Serializable
         private data class FcmNotificationResponse(
             val name: String
         )
     }
 
-    private val serviceAccount: InputStream? =
-        Thread.currentThread().contextClassLoader.getResourceAsStream("firebaseServiceAccountKey.json") ?: throw FileNotFoundException("firebaseServiceAccountKey.json is required and should be placed in the resources of the server")
+    private val serviceAccount: InputStream =
+        Thread.currentThread().contextClassLoader.getResourceAsStream("firebaseServiceAccountKey.json")
+            ?: throw FileNotFoundException("firebaseServiceAccountKey.json is required and should be placed in the resources of the server")
     private val credentials: GoogleCredentials? = GoogleCredentials.fromStream(serviceAccount)
         .createScoped(listOf("https://www.googleapis.com/auth/firebase.messaging"))
 

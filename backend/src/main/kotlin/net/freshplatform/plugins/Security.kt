@@ -47,14 +47,14 @@ fun Application.configureSecurity() {
 
         println("$remoteHost = $requestPath")
 
-        // Add lock requests functionallity
+        // Add lock requests functionality
         val file = File(getUserWorkingDirectory(), Constants.Folders.LOCKED_FILE_NAME)
         if (file.exists()) {
             call.respondJsonText(HttpStatusCode.ServiceUnavailable, "Sorry, but the server is unavailable right now, please check back later.")
             finish()
         }
 
-        // Add development mode functionallity
+        // Add development mode functionality
 
 //        if (ApplicationState.developmentMode) {
 ////            val allowedIpAddress = (mSystem.getenv("ALLOWED_IP_ADDRESS") ?: "")
