@@ -3,8 +3,8 @@ import 'dart:developer' as developer show log;
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/chat/m_chat_message.dart';
+import 'package:shared_alrayada/services/networking/dio/dio.dart';
 import 'package:shared_alrayada/utils/constants/routes.dart';
-
 
 class SupportChatsNotififer extends StateNotifier<List<ChatRoom>> {
   SupportChatsNotififer() : super([]);
@@ -31,7 +31,7 @@ class SupportChatsNotififer extends StateNotifier<List<ChatRoom>> {
         RoutesConstants.appSupportRoutes.adminRoutes.getRooms,
       );
       final rooms =
-          response.data?.map(ChatRoom.fromJson).toList() ?? [];
+          response.data?.map((e) => ChatRoom.fromJson(e)).toList() ?? [];
       state = [...rooms];
     } on DioException {
       rethrow;

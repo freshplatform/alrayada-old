@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../core/locales.dart';
+import '../../extensions/build_context.dart';
 import '../../gen/assets.gen.dart';
 
 final error = [
@@ -16,14 +16,15 @@ final error = [
 
 class InternetErrorWithTryAgain extends StatelessWidget {
   const InternetErrorWithTryAgain({
-    required this.onTryAgain, super.key,
+    required this.onTryAgain,
+    super.key,
   });
 
   final VoidCallback onTryAgain;
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final materialTheme = Theme.of(context);
     final cupertinoTheme = CupertinoTheme.of(context);
     final randomAsset = error[Random().nextInt(error.length)];
@@ -62,7 +63,7 @@ class InternetErrorWithoutTryAgainDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final materialTheme = Theme.of(context);
     final cupertinoTheme = CupertinoTheme.of(context);
     final randomAsset = error[Random().nextInt(error.length)];

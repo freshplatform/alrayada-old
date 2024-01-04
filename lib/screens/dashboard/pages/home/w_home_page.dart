@@ -13,10 +13,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_alrayada/data/product/m_product.dart';
 
+import '../../../../extensions/build_context.dart';
 import '../../../../gen/assets.gen.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../widgets/adaptive/refresh_indicator.dart';
 import '../../../view_products/s_products.dart';
-import '/core/locales.dart';
 import '/core/theme_data.dart';
 import '/providers/p_offer.dart';
 import '/providers/p_order.dart';
@@ -43,7 +44,7 @@ class HomePage extends ConsumerStatefulWidget implements NavigationData {
   NavigationItemData Function(
       BuildContext context, WidgetRef ref) get navigationItemData => (context,
           ref) {
-        final translations = AppLocalizations.of(context)!;
+        final translations = context.loc;
         return NavigationItemData(
           actions: [
             PlatformIconButton(
@@ -347,7 +348,7 @@ class _HomePageState extends ConsumerState<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return AdaptiveRefreshIndicator(
       onRefresh: _refreshAll,
       child: Column(

@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/server/server.dart';
 import 'package:web_socket_channel/io.dart';
 
+import '../../extensions/build_context.dart';
 import '../../utils/constants/routes.dart';
 import '../../widgets/errors/w_internet_error.dart';
-import '/core/locales.dart';
 import '/providers/p_user.dart';
 import '/screens/support/w_support_messages.dart';
 import '/widgets/errors/w_error.dart';
@@ -70,7 +70,7 @@ class _SupportScreenState extends ConsumerState<SupportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final userContainer = ref.read(UserNotifier.provider);
     if (userContainer == null) {
       return PlatformScaffold(

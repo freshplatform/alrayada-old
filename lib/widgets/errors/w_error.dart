@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../extensions/build_context.dart';
 import '../../gen/assets.gen.dart';
-import '/core/locales.dart';
 
 class _LottieErrorWidget extends StatelessWidget {
   const _LottieErrorWidget();
@@ -30,14 +30,15 @@ class _LottieErrorWidget extends StatelessWidget {
 
 class ErrorWithTryAgain extends StatelessWidget {
   const ErrorWithTryAgain({
-    required this.onTryAgain, super.key,
+    required this.onTryAgain,
+    super.key,
   });
 
   final VoidCallback onTryAgain;
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final items = [
       const _LottieErrorWidget(),
       PlatformElevatedButton(

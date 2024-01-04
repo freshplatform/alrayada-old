@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_alrayada/data/order/m_order.dart';
 
-import '../../../../../core/locales.dart';
+import '../../../../../extensions/build_context.dart';
 import '../../../../../gen/assets.gen.dart';
 import '../../../../../widgets/adaptive/w_card.dart';
 
@@ -44,7 +44,7 @@ class _PaymentMethodsSelectorState extends State<PaymentMethodsSelector> {
   }
 
   String _getPaymentMethodLabel(PaymentMethod paymentMethod) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     switch (paymentMethod) {
       case PaymentMethod.creditCard:
         return translations.credit_card;
@@ -63,7 +63,7 @@ class _PaymentMethodsSelectorState extends State<PaymentMethodsSelector> {
       child: Column(
         children: PaymentMethod.values
             .map(
-              (e) => PlatformRadioListTile<PaymentMethod>(
+              (e) => RadioListTile.adaptive(
                 groupValue: _selectedPayment,
                 value: e,
                 onChanged: (value) {

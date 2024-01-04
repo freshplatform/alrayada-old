@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:shared_alrayada/data/user/m_user.dart';
 
-import '/core/locales.dart';
+import '../../../extensions/build_context.dart';
 import '/data/location/s_location.dart';
 import '/widgets/inputs/city_picker/cupertino/w_city_picker.dart';
 import 'city_picker_utils.dart';
 
 class CityDropDownFormField extends StatefulWidget {
   const CityDropDownFormField({
-    required this.onSaved, super.key,
+    required this.onSaved,
+    super.key,
     this.initialCity = IraqGovernorate.baghdad,
   });
 
@@ -76,7 +77,7 @@ class _CityDropDownFormFieldState extends State<CityDropDownFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return Semantics(
       label: translations.city,
       child: PlatformWidget(

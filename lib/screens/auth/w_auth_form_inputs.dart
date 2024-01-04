@@ -8,8 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/user/auth/m_auth_request_response.dart';
 import 'package:shared_alrayada/data/user/m_user.dart';
 
+import '../../extensions/build_context.dart';
 import '../../providers/p_user.dart';
-import '/core/locales.dart';
 import '/screens/auth/forgot_password/w_auth_forgot_password.dart';
 import '/screens/auth/social_login/w_social_login.dart';
 import '/services/native/connectivity_checker/s_connectivity_checker.dart';
@@ -23,7 +23,8 @@ import '/widgets/inputs/password/w_password.dart';
 
 class AuthFormInputs extends ConsumerStatefulWidget {
   const AuthFormInputs({
-    required this.onIsLoginChange, super.key,
+    required this.onIsLoginChange,
+    super.key,
   });
 
   final Function(bool isLogin) onIsLoginChange;
@@ -86,7 +87,7 @@ class _AuthFormInputsState extends ConsumerState<AuthFormInputs> {
     bool isLogin,
     AuthRequest authRequest,
   ) async {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
 
     final userProvider = ref.read(UserNotifier.provider.notifier);
     final hasConnection =
@@ -202,7 +203,7 @@ class _AuthFormInputsState extends ConsumerState<AuthFormInputs> {
   }
 
   Future<void> _signup() async {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final result = await showPlatformDialog<bool>(
           context: context,
           builder: (context) => PlatformAlertDialog(
@@ -263,7 +264,7 @@ class _AuthFormInputsState extends ConsumerState<AuthFormInputs> {
   final _ownerPhoneNumberFocusNode = FocusNode();
 
   List<Widget> _signUpTextFields() {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return [
       PasswordTextFormField(
         materialIcon: const Icon(Icons.lock),
@@ -302,7 +303,7 @@ class _AuthFormInputsState extends ConsumerState<AuthFormInputs> {
   @override
   Widget build(BuildContext context) {
     final cupertinoTheme = CupertinoTheme.of(context);
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final formInputs = [
       Semantics(
         label: translations.email_address,
@@ -494,7 +495,7 @@ List<Widget> userDataTextFields({
   IraqGovernorate city = IraqGovernorate.baghdad,
   FocusNode? ownerPhoneNumberFocusNode,
 }) {
-  final translations = AppLocalizations.of(context)!;
+  final translations = context.loc;
   return [
     Row(
       children: [

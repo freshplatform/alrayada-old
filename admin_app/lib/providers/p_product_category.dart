@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/product/category/m_product_category.dart';
+import 'package:shared_alrayada/services/networking/dio/dio.dart';
 import 'package:shared_alrayada/utils/constants/routes.dart';
-
 
 class CategoryItemNotifier extends StateNotifier<ProductCategory> {
   CategoryItemNotifier(super.state);
@@ -17,7 +17,8 @@ class CategoryItemNotifier extends StateNotifier<ProductCategory> {
   final _dio = DioService.getDio();
 
   Future<String?> updateSubCategory({
-    required ProductCategoryRequest productCategoryRequest, String? newFilePath,
+    required ProductCategoryRequest productCategoryRequest,
+    String? newFilePath,
   }) async {
     try {
       final Map<String, dynamic> formDataMap = {
@@ -48,7 +49,9 @@ class CategoryItemNotifier extends StateNotifier<ProductCategory> {
   }
 
   Future<String?> addSubCategory({
-    required ProductCategoryRequest productCategoryRequest, required WidgetRef ref, String? filePath,
+    required ProductCategoryRequest productCategoryRequest,
+    required WidgetRef ref,
+    String? filePath,
   }) async {
     if (productCategoryRequest.parent == null) {
       throw 'The parent of the request can not be null since this sub category';
@@ -112,7 +115,7 @@ class CategoriesNotififer extends StateNotifier<List<ProductCategory>> {
       final response = await _dio.get<List<dynamic>>(
           RoutesConstants.productsCategoryRoutes.getCategories);
       final categories =
-          response.data?.map(ProductCategory.fromJson).toList() ?? [];
+          response.data?.map((e) => ProductCategory.fromJson(e)).toList() ?? [];
       state = [...categories];
     } on DioException {
       rethrow;
@@ -137,7 +140,8 @@ class CategoriesNotififer extends StateNotifier<List<ProductCategory>> {
   }
 
   Future<String?> addCategory({
-    required ProductCategoryRequest productCategoryRequest, String? filePath,
+    required ProductCategoryRequest productCategoryRequest,
+    String? filePath,
   }) async {
     if (productCategoryRequest.parent != null) {
       throw 'The parent of the request can not be not null since this parent category';

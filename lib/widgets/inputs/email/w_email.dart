@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-import '../../../core/locales.dart';
+import '../../../extensions/build_context.dart';
 
 class EmailTextFormField extends StatelessWidget {
   const EmailTextFormField({
-    required this.textInputAction, super.key,
+    required this.textInputAction,
+    super.key,
     this.onSaved,
     this.validator,
     this.labelText,
@@ -27,7 +28,7 @@ class EmailTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return Semantics(
       label: translations.email_address,
       child: PlatformTextFormField(

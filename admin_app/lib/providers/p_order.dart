@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:shared_alrayada/data/order/m_order.dart';
+import 'package:shared_alrayada/services/networking/dio/dio.dart';
 import 'package:shared_alrayada/utils/constants/routes.dart';
-
 
 class OrderItemNotififer extends StateNotifier<Order> {
   OrderItemNotififer(super.state);
@@ -90,7 +90,7 @@ class OrdersNotifier extends StateNotifier<List<Order>> {
         },
       );
       final orders =
-          response.data?.map(Order.fromJson).toList() ?? [];
+          response.data?.map((e) => Order.fromJson(e)).toList() ?? [];
       if (orders.isEmpty) {
         isAllLoadded = true;
         return;

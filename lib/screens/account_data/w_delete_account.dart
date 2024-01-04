@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '/core/locales.dart';
+import '../../extensions/build_context.dart';
 import '/providers/p_user.dart';
 import '/services/native/connectivity_checker/s_connectivity_checker.dart';
 
@@ -49,7 +49,7 @@ class _DeleteAccountState extends ConsumerState<DeleteAccount> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
 
     return PlatformAlertDialog(
       title: Text(translations.confirm_delete_account),

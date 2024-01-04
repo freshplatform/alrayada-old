@@ -49,10 +49,6 @@ fun Application.dependencyInjection() {
 val mainModule = module {
     single {
         val databaseUrl = SecretVariablesService.require(SecretVariablesName.DatabaseUrl)
-//        val settings = MongoClientSettings.builder()
-//            .uuidRepresentation(UuidRepresentation.STANDARD)
-//            .applyConnectionString(ConnectionString(databaseUrl))
-//            .build()
         KMongo.createClient(
             connectionString = databaseUrl,
         )

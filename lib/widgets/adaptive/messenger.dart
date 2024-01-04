@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-import '/core/locales.dart';
+import '../../extensions/build_context.dart';
 
 class AdaptiveMessenger {
   AdaptiveMessenger._privateConstructor();
@@ -13,7 +13,7 @@ class AdaptiveMessenger {
     String? title,
     bool useSnackBarInMaterial = true,
   }) async {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     if (isMaterial(context)) {
       if (useSnackBarInMaterial) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();

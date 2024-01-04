@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../core/locales.dart';
+import '../../extensions/build_context.dart';
 import '../../gen/assets.gen.dart';
 import '/screens/auth/s_auth.dart';
 
@@ -11,7 +11,7 @@ class NotAuthenticatedError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

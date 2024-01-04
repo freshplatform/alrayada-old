@@ -29,6 +29,8 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.html.*
+import net.freshplatform.routes.RouteBase
+import net.freshplatform.utils.extensions.isProductionMode
 import java.time.LocalDateTime
 
 class UserRoutes(
@@ -40,11 +42,12 @@ class UserRoutes(
     private val mailSenderService: MailSenderService,
     private val socialAuthenticationService: SocialAuthenticationService,
     private val telegramBotService: TelegramBotService
-) {
+) : RouteBase() {
     companion object {
-        const val SIGNIN_ROUTE_NAME = "signIn"
-        const val SIGNUP_ROUTE_NAME = "signUp"
+        const val SIGN_IN_ROUTE_NAME = "signIn"
+        const val SIGN_UP_ROUTE_NAME = "signUp"
     }
+
 
     private suspend fun notifyTelegramChatAboutRegister(user: User) {
         val msg = buildString {
@@ -172,8 +175,8 @@ class UserRoutes(
         )
     }
 
-    fun signUp() = router.rateLimit(RateLimitName(SIGNUP_ROUTE_NAME)) {
-        post("/${SIGNUP_ROUTE_NAME}") {
+    fun signUp() = router.rateLimit(RateLimitName(SIGN_UP_ROUTE_NAME)) {
+        post("/${SIGN_UP_ROUTE_NAME}") {
             call.protectRouteToAppOnly()
             val request = call.receiveBodyAs<AuthSignUpRequest>()
             val error = request.validate()
@@ -190,7 +193,8 @@ class UserRoutes(
                 return@post
             }
             val password = hashingService.generateSaltedHash(request.password)
-            val emailVerificationData = tokenVerificationService.generate(User.Companion.TokenVerificationData.EmailVerification.NAME)
+            val emailVerificationData =
+                tokenVerificationService.generate(User.Companion.TokenVerificationData.EmailVerification.NAME)
             val newUser = User(
                 email = request.email.lowercase(),
                 password = password.hash,
@@ -226,6 +230,9 @@ class UserRoutes(
                             " please ignore this message"
                 )
             )
+            if (!isProductionMode()) {
+                println("Here is your verification link: $verificationLink")
+            }
             if (!sendEmailSuccess) {
                 call.respondJsonText(
                     HttpStatusCode.InternalServerError,
@@ -296,8 +303,8 @@ class UserRoutes(
         }
     }
 
-    fun signIn() = router.rateLimit(RateLimitName(SIGNIN_ROUTE_NAME)) {
-        post("/$SIGNIN_ROUTE_NAME") {
+    fun signIn() = router.rateLimit(RateLimitName(SIGN_IN_ROUTE_NAME)) {
+        post("/$SIGN_IN_ROUTE_NAME") {
             call.protectRouteToAppOnly()
             val request = call.receiveBodyAs<AuthSignInRequest>()
             val error = request.validate()
@@ -434,7 +441,8 @@ class UserRoutes(
         )
         if (!success) {
             call.respondJsonText(
-                HttpStatusCode.InternalServerError, "Error while updating forgot password link, Please try again later or contact us."
+                HttpStatusCode.InternalServerError,
+                "Error while updating forgot password link, Please try again later or contact us."
             )
             return@post
         }
@@ -664,5 +672,21 @@ class UserRoutes(
             }
             call.respondJsonText(HttpStatusCode.OK, "User has been successfully deleted!")
         }
+    }
+
+    override fun Route.register() {
+        socialAuthentication()
+        signInWithAppleWeb()
+        signUp()
+        signIn()
+        getUserData()
+        verifyEmailAccount()
+        updateUserData()
+        updateDeviceToken()
+        forgotPassword()
+        resetPasswordForm()
+        resetPassword()
+        updatePassword()
+        deleteSelfAccount()
     }
 }

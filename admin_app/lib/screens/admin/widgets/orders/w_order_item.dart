@@ -12,7 +12,9 @@ import 'w_print_order.dart';
 
 class OrderItem extends ConsumerStatefulWidget {
   const OrderItem({
-    required this.index, required this.order, super.key,
+    required this.index,
+    required this.order,
+    super.key,
   });
 
   final int index;
@@ -36,7 +38,6 @@ class _OrderItemState extends ConsumerState<OrderItem> {
       case OrderStatus.pending:
         return Colors.grey;
     }
-    return null;
   }
 
   @override
@@ -263,7 +264,7 @@ class _OrderItemState extends ConsumerState<OrderItem> {
                             ),
                           ],
                         );
-                      }).toList()
+                      })
                     ],
                   ),
                 ),

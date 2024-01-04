@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/product/m_product.dart';
+import 'package:shared_alrayada/services/networking/dio/dio.dart';
 import 'package:shared_alrayada/utils/constants/routes.dart';
 
-
 class ProductItemNotifier extends StateNotifier<Product> {
-  ProductItemNotifier(Product product) : super(product);
+  ProductItemNotifier(super.product);
 
   static final provider = StateNotifierProvider.autoDispose
       .family<ProductItemNotifier, Product, Product>((ref, product) {
@@ -15,7 +15,9 @@ class ProductItemNotifier extends StateNotifier<Product> {
   });
 
   Future<String?> updateProduct({
-    required ProductRequest productRequest, required String productId, String? newFilePath,
+    required ProductRequest productRequest,
+    required String productId,
+    String? newFilePath,
   }) async {
     try {
       final Map<String, dynamic> map = {
@@ -93,7 +95,8 @@ class ProductsNotifier extends StateNotifier<List<Product>> {
   }
 
   Future<String?> addProduct({
-    required ProductRequest productRequest, String? filePath,
+    required ProductRequest productRequest,
+    String? filePath,
   }) async {
     try {
       final Map<String, dynamic> map = {

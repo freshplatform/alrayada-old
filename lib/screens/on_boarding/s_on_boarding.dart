@@ -6,9 +6,9 @@ import 'package:lottie/lottie.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../core/theme_data.dart';
+import '../../extensions/build_context.dart';
 import '../../gen/assets.gen.dart';
 import '../dashboard/s_dashboard.dart';
-import '/core/locales.dart';
 import '/providers/p_settings.dart';
 
 class OnBoardingScreen extends ConsumerStatefulWidget {
@@ -85,7 +85,7 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final settingsProvider =
         ref.read(SettingsNotifier.settingsProvider.notifier);
     final pages = [

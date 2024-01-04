@@ -2,11 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-import '../../../core/locales.dart';
+import '../../../extensions/build_context.dart';
 
 class PasswordTextFormField extends StatefulWidget {
   const PasswordTextFormField({
-    required this.labelText, required this.materialIcon, required this.cupertinoIcon, super.key,
+    required this.labelText,
+    required this.materialIcon,
+    required this.cupertinoIcon,
+    super.key,
     this.onSaved,
     this.validator,
     this.controller,
@@ -36,7 +39,7 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return Semantics(
       label: translations.confirm_password,
       child: PlatformTextFormField(

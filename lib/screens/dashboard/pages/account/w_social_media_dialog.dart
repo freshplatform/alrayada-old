@@ -4,10 +4,10 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_alrayada/server/server.dart';
 
+import '../../../../extensions/build_context.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../services/native/url_launcher/s_url_launcher.dart';
 import '../../../../widgets/adaptive/w_icon.dart';
-import '/core/locales.dart';
 
 class SocialMediaLinksDialog extends StatelessWidget {
   const SocialMediaLinksDialog({super.key});
@@ -31,7 +31,7 @@ class SocialMediaLinksDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return AlertDialog(
       title: Text(translations.social_media),
       content: SizedBox(

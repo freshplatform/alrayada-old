@@ -51,7 +51,7 @@ class _SupportMessagesListState extends State<SupportMessagesList> {
             final message = ChatMessage.fromJson(json);
             _messages.add(message);
           } else if (json is List<dynamic>) {
-            _messages.addAll(json.map(ChatMessage.fromJson));
+            _messages.addAll(json.map((e) => ChatMessage.fromJson(e)));
           }
         } catch (e) {
           // TODO("Maybe handle errors")

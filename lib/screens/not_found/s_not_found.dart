@@ -1,11 +1,11 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../core/locales.dart';
 import '../../core/theme_data.dart';
+import '../../extensions/build_context.dart';
 import '../../gen/assets.gen.dart';
 
 class NotFoundScreen extends StatelessWidget {
@@ -15,7 +15,7 @@ class NotFoundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
@@ -29,7 +29,7 @@ class NotFoundScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Lottie.asset(
-                    _assets[Random().nextInt(_assets.length)].path,
+                    _assets[math.Random().nextInt(_assets.length)].path,
                   ),
                   Text(
                     translations.this_page_cant_be_found_msg,

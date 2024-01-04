@@ -3,8 +3,8 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../extensions/build_context.dart';
 import '../../gen/assets.gen.dart';
-import '/core/locales.dart';
 import '/providers/p_favorite.dart';
 import '/screens/view_products/w_product_list.dart';
 
@@ -17,7 +17,7 @@ class FavoritesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final favoritesProvider =
         ref.read(FavoritesNotifier.favoritesProvider.notifier);
     return PlatformScaffold(

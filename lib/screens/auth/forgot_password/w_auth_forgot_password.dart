@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '/core/locales.dart';
+import '../../../extensions/build_context.dart';
 import '/providers/p_user.dart';
 import '/utils/validators/auth_validators.dart';
 
@@ -40,7 +40,7 @@ class _ForgotPasswordDialogState extends ConsumerState<ForgotPasswordDialog> {
       return;
     }
     final translations = await Future.microtask(
-      () => AppLocalizations.of(context)!,
+      () => context.loc,
     );
 
     _emailError = error
@@ -58,7 +58,7 @@ class _ForgotPasswordDialogState extends ConsumerState<ForgotPasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return PlatformAlertDialog(
       material: (context, platform) => MaterialAlertDialogData(
         icon: const Icon(Icons.lock_reset_outlined),

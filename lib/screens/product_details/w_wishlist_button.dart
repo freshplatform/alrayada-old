@@ -3,8 +3,8 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/product/m_product.dart';
 
+import '../../extensions/build_context.dart';
 import '../../providers/p_product.dart';
-import '/core/locales.dart';
 
 class WishlistProductButton extends ConsumerStatefulWidget {
   const WishlistProductButton({required this.product, super.key});
@@ -19,7 +19,7 @@ class WishlistProductButton extends ConsumerStatefulWidget {
 class _WishlistProductButtonState extends ConsumerState<WishlistProductButton> {
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final productProvider = ref.read(
       ProductItemNotifier.productItemProvider(widget.product).notifier,
     );

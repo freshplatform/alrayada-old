@@ -6,11 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_alrayada/data/order/m_order.dart';
 
+import '../../../../../extensions/build_context.dart';
 import '../../../../../gen/assets.gen.dart';
 import '../../../../../providers/p_order.dart';
 import '../../../../../services/native/connectivity_checker/s_connectivity_checker.dart';
 import '../../../../../widgets/errors/w_internet_error.dart';
-import '/core/locales.dart';
 import '/screens/dashboard/pages/cart/checkout/w_payment_method.dart';
 import '/widgets/adaptive/messenger.dart';
 
@@ -42,7 +42,7 @@ class _CheckoutModalDialogState extends ConsumerState<CheckoutModalDialog> {
   }
 
   Future<void> _submit() async {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final orderProvider = ref.read(OrdersNotifier.ordersProvider.notifier);
     _error = '';
     _formKey.currentState?.validate() ??
@@ -101,7 +101,7 @@ class _CheckoutModalDialogState extends ConsumerState<CheckoutModalDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: SingleChildScrollView(

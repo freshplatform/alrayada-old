@@ -1,6 +1,5 @@
 package net.freshplatform.utils.extensions.request
 
-import net.freshplatform.plugins.AppSecurity
 import net.freshplatform.utils.extensions.getFileFromUserWorkingDirectory
 import net.freshplatform.utils.extensions.isProductionServer
 import io.ktor.http.*
@@ -11,6 +10,8 @@ import io.ktor.server.response.*
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
+import net.freshplatform.services.secret_variables.SecretVariablesName
+import net.freshplatform.services.secret_variables.SecretVariablesService
 
 
 class RouteProtectedException: Exception("This route protected and can be accessed only by the app")
@@ -19,7 +20,7 @@ class RouteProtectedException: Exception("This route protected and can be access
 fun ApplicationCall.protectRouteToAppOnly() {
     if (!isProductionServer()) return
     val api = this.request.header("Api") ?: ""
-    if (api != AppSecurity.apiKey) {
+    if (api != SecretVariablesService.require(SecretVariablesName.ApiKey)) {
         throw RouteProtectedException()
     }
 }
@@ -46,17 +47,7 @@ suspend fun ApplicationCall.respondJsonText(status: HttpStatusCode, text: String
 
 suspend inline fun <reified T : Any> ApplicationCall.receiveBodyNullableAs(): T? {
     return kotlin.runCatching { receiveNullable<T>() }.getOrNull()
-} /*= try {
-    this.receiveNullable<T>()
-} catch (e: BadRequestException) {
-    null
-} catch (e: CannotTransformContentToTypeException) {
-    null
-} catch (e: Exception) {
-    e.printStackTrace()
-    println("Unhandled error ${e.message}")
-    null
-}*/
+}
 
 class RequestBodyMustValidException(errorMessage: String = "Request body must valid.") : Exception(errorMessage)
 class MissingParameterException(missingParameterName: String) : Exception(missingParameterName)

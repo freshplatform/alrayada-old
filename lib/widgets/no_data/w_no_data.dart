@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../extensions/build_context.dart';
 import '../../gen/assets.gen.dart';
-import '/core/locales.dart';
 import '/core/theme_data.dart';
 
 class _LottieNoDataWidget extends StatelessWidget {
@@ -29,13 +29,14 @@ class _LottieNoDataWidget extends StatelessWidget {
 
 class NoDataWithTryAgain extends StatelessWidget {
   const NoDataWithTryAgain({
-    required this.onRefresh, super.key,
+    required this.onRefresh,
+    super.key,
   });
   final VoidCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -59,7 +60,7 @@ class NoDataWithoutTryAgain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return Center(
       child: SingleChildScrollView(
         padding: EdgeInsets.zero,

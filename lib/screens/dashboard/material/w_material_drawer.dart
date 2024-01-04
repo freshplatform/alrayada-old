@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../providers/p_user.dart';
 import '../../account_data/s_account_data.dart';
 import '../../settings/s_settings.dart';
 import '../../support/s_support.dart';
-import '/core/locales.dart';
+
 import '/screens/notification/s_notification_list.dart';
 
 class DashboardMaterialDrawer extends ConsumerWidget {

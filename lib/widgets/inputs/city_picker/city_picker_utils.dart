@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:shared_alrayada/data/user/m_user.dart';
 
-import '../../../core/locales.dart';
 import '../../../data/location/s_location.dart';
+import '../../../extensions/build_context.dart';
 
 class CityPickerUtils {
   const CityPickerUtils._();
@@ -23,7 +23,7 @@ class CityPickerUtils {
 
   static String getTranslatedCityName(
       BuildContext context, IraqGovernorate city) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     switch (city) {
       case IraqGovernorate.baghdad:
         return translations.baghdad;

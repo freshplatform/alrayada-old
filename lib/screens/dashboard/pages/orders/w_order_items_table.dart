@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/order/m_order.dart';
 
 import '../../../../core/theme_data.dart';
+import '../../../../extensions/build_context.dart';
 import '../../../../widgets/w_price.dart';
-import '/core/locales.dart';
 
 class OrderItemsTable extends ConsumerWidget {
   const OrderItemsTable({required this.order, super.key});
@@ -14,7 +14,7 @@ class OrderItemsTable extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return Table(
       border: TableBorder.all(color: Colors.grey, width: 0.2),
       children: [

@@ -16,7 +16,7 @@ val HttpHeaders.ApiKey: String
 fun Application.configureHTTP() {
     configureHTTPS()
     install(DefaultHeaders) {
-        header("X-Engine", "Ktor") // will send this header with each response )
+        header("X-Engine", "Ktor")
     }
     install(CORS) {
         allowMethod(HttpMethod.Options)
@@ -26,14 +26,6 @@ fun Application.configureHTTP() {
         allowHeader(HttpHeaders.ContentType)
         allowHeader(HttpHeaders.Authorization)
         allowHeader(HttpHeaders.ApiKey)
-//        allowHost("https://appleid.apple.com/")
-//        val cloudflareIpRanges = listOf(
-//        )
-//        val ips = listOf("172.70.242.126", "172.70.243.60")
-//        cloudflareIpRanges.forEach {
-//            allowHost(it)
-//        }
-//        anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
         allowCredentials = true
         allowSameOrigin = true
         allowHost("apple.com", schemes = listOf("https"), subDomains = listOf("appleid"))

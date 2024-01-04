@@ -38,7 +38,7 @@ class NotificationsImpl extends Notifications {
       //     .addNotificationFromPushNotification(
       //       MyAppNotification.fromOneSignal(event.notification),
     });
-    foregroundWillDisplayListener(OSNotificationWillDisplayEvent event) {
+    void foregroundWillDisplayListener(OSNotificationWillDisplayEvent event) {
       print('On foreground will display listener');
       ref
           .read(NotificationNotififer.notificationsProvider.notifier)

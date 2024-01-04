@@ -10,9 +10,9 @@ import 'package:shared_alrayada/data/user/m_user.dart';
 import 'package:shared_alrayada/server/server.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../../extensions/build_context.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../utils/constants/routes.dart';
-import '/core/locales.dart';
 import '/core/theme_data.dart';
 import '/data/social_authentication/social_authentication.dart';
 import '/providers/p_user.dart';
@@ -48,7 +48,7 @@ class _SocialLoginState extends ConsumerState<SocialLogin> {
   void setLoading(bool newValue) => setState(() => _isLoading = newValue);
 
   Future<void> _authenticateWithFacebook() async {
-    final translationa = AppLocalizations.of(context)!;
+    final translationa = context.loc;
     AdaptiveMessenger.showPlatformMessage(
       context: context,
       message: translationa.sorry_this_feature_is_not_available_at_the_moment,
@@ -81,7 +81,7 @@ class _SocialLoginState extends ConsumerState<SocialLogin> {
   }
 
   Future<void> _authenticateWithApple() async {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     try {
       setLoading(true);
 
@@ -185,9 +185,10 @@ class _SocialLoginState extends ConsumerState<SocialLogin> {
   void handleError({
     required String? error,
     required SocialAuthentication socialAuth,
-    required String provider, String initialLabOwnerName = '',
+    required String provider,
+    String initialLabOwnerName = '',
   }) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
 
     if (error != null) {
       if (error ==
@@ -221,7 +222,7 @@ class _SocialLoginState extends ConsumerState<SocialLogin> {
   Widget build(BuildContext context) {
     final materialTheme = Theme.of(context);
     final cupertinoTheme = CupertinoTheme.of(context);
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     const fontSize = 50 * 0.43;
     const appleIconSizeScale = 28 / 44;
     const double height = 44;

@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shared_alrayada/utils/constants/patterns.dart';
 
-import '/core/locales.dart';
+import '../../extensions/build_context.dart';
 
 abstract class AuthValidators {
   // TODO('Improve the auth validators')
   static String? validateEmail(String? email, BuildContext context) {
     final value = email?.trim() ?? '';
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     if (value.isEmpty) {
       return translations.email_address_is_empty;
     }
@@ -28,7 +28,7 @@ abstract class AuthValidators {
   }
 
   static String? validatePassword(String? password, BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final value = password?.trim() ?? '';
     if (value.isEmpty) return translations.password_should_not_be_empty;
     final bool isMoreThan8 = value.length < 8;
@@ -70,10 +70,11 @@ abstract class AuthValidators {
   }
 
   static String? validateConfirmPassword({
-    required BuildContext context, String? password,
+    required BuildContext context,
+    String? password,
     String? confirmPassword,
   }) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     if (password!.trim().isEmpty || confirmPassword!.trim().isEmpty) {
       return translations.password_should_not_be_empty;
     }
@@ -86,7 +87,7 @@ abstract class AuthValidators {
   static const phoneNumberPattern = r'^07\d{9}$';
   static String? validatePhoneNumber(
       String? phoneNumber, BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final value = phoneNumber?.trim() ?? '';
     if (value.isEmpty) {
       return translations.phone_number_should_not_be_empty;

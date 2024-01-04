@@ -4,10 +4,10 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/user/m_user.dart';
 
+import '../../extensions/build_context.dart';
 import '../../providers/p_user.dart';
 import '../../widgets/adaptive/messenger.dart';
 import '../../widgets/adaptive/w_icon.dart';
-import '/core/locales.dart';
 import '/screens/account_data/w_delete_account.dart';
 import '/screens/auth/w_auth_form_inputs.dart';
 import '/widgets/buttons/w_outlined_button.dart';
@@ -37,7 +37,7 @@ class _AccountDataScreenState extends ConsumerState<AccountDataScreen> {
     final valid = _formKey.currentState?.validate() ?? false;
     if (!valid) return;
     _formKey.currentState?.save();
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
 
     setLoading(true);
     final error = await ref
@@ -56,7 +56,7 @@ class _AccountDataScreenState extends ConsumerState<AccountDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(translations.account_data),

@@ -81,10 +81,10 @@ class KtorOneSignalNotificationService(
             val responseJson = response.body<OneSignalNotificationResponse>()
             return responseJson.id
         } catch (e: ResponseException) {
-            "error.txt".getFileFromUserWorkingDirectory().appendText("\n${e.stackTraceToString()}")
+            // TODO: Log error
             null
         } catch (e: Exception) {
-            "error.txt".getFileFromUserWorkingDirectory().appendText("\n${e.stackTraceToString()}")
+            // TODO: Log error
             null
         }
     }

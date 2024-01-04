@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemNavigator;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/locales.dart';
+import '../../../extensions/build_context.dart';
 import '../../../providers/p_settings.dart';
 import '../models/m_navigation_item.dart';
 import 'w_material_drawer.dart';
@@ -53,26 +53,26 @@ class MaterialScaffoldDashbardState
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
-    // const useNavigationRail = true;
-    return WillPopScope(
-      onWillPop: () async =>
-          await showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text(translations.close_the_app),
-              content: Text(translations.close_the_app_msg),
-              actions: [
-                TextButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: Text(translations.no)),
-                TextButton(
-                    onPressed: () => SystemNavigator.pop(animated: true),
-                    child: Text(translations.yes)),
-              ],
+    final translations = context.loc;
+
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(translations.close_the_app),
+          content: Text(translations.close_the_app_msg),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(translations.no)),
+            TextButton(
+              onPressed: () => SystemNavigator.pop(animated: true),
+              child: Text(translations.yes),
             ),
-          ) ??
-          false,
+          ],
+        ),
+      ),
       child: Scaffold(
         drawer: DashboardMaterialDrawer(translations: translations),
         floatingActionButton: (_screens[_currentIndex].body as NavigationData)

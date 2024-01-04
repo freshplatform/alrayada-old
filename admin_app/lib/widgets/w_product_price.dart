@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class ProductPrice extends StatelessWidget {
   const ProductPrice({
-    required this.originalPrice, required this.discountPercentage, Key? key,
+    required this.originalPrice,
+    required this.discountPercentage,
+    super.key,
     this.textAlign = TextAlign.center,
     this.haveGradient = true,
-  }) : super(key: key);
+  });
   final double originalPrice;
   final double discountPercentage;
   final TextAlign textAlign;

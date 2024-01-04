@@ -4,7 +4,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:web_socket_channel/io.dart';
 
-import '/core/locales.dart';
+import '../../extensions/build_context.dart';
 import '/providers/p_settings.dart';
 
 class NewSupportChatMessage extends ConsumerStatefulWidget {
@@ -54,7 +54,7 @@ class _NewSupportChatMessageState extends ConsumerState<NewSupportChatMessage> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return Container(
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.only(top: 2),

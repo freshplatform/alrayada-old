@@ -8,7 +8,9 @@ import 'w_message_item.dart';
 
 class ChatMessagesList extends StatefulWidget {
   const ChatMessagesList({
-    required this.scrollController, required this.channel, super.key,
+    required this.scrollController,
+    required this.channel,
+    super.key,
   });
 
   final ScrollController scrollController;
@@ -40,7 +42,7 @@ class _ChatMessagesListState extends State<ChatMessagesList> {
             final message = ChatMessage.fromJson(json);
             messages.add(message);
           } else if (json is List<dynamic>) {
-            messages.addAll(json.map(ChatMessage.fromJson));
+            messages.addAll(json.map((e) => ChatMessage.fromJson(e)));
           }
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../extensions/build_context.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/p_order.dart';
 import '../providers/p_product.dart';
 import '../screens/dashboard/pages/orders/order_details/s_order_details.dart';
@@ -11,7 +13,6 @@ import '../screens/product_details/s_product_details.dart';
 import '../widgets/adaptive/messenger.dart';
 import '../widgets/errors/w_error.dart';
 import '../widgets/no_data/w_no_data.dart';
-import 'locales.dart';
 
 @immutable
 class AppRouter {
@@ -28,16 +29,16 @@ class AppRouter {
   static Route<dynamic>? onGenerateRoute(
       RouteSettings settings, WidgetRef ref) {
     final context = navigatorKey.currentContext!;
-    final translations = AppLocalizations.of(context)!;
 
     final uri = Uri.parse(settings.name ?? '');
     if (uri.pathSegments.length == 2 && uri.pathSegments.first == 'products') {
       final id = uri.pathSegments[1];
       if (id.trim().isEmpty) {
         return _buildError(
-            context: context,
-            translations: translations,
-            error: translations.unknown_error_with_msg('Product id is blank'));
+          context: context,
+          translations: context.loc,
+          error: context.loc.unknown_error_with_msg('Product id is blank'),
+        );
       }
       final productProvider =
           ref.read(ProductsNotifier.productsProvider.notifier);
@@ -74,8 +75,8 @@ class AppRouter {
       if (orderNumber.trim().isEmpty) {
         return _buildError(
           context: context,
-          translations: translations,
-          error: translations.unknown_error_with_msg(
+          translations: context.loc,
+          error: context.loc.unknown_error_with_msg(
             'orderNumber parameter is missing.',
           ),
         );
@@ -83,8 +84,8 @@ class AppRouter {
       if (isOrderPaid == null) {
         return _buildError(
           context: context,
-          translations: translations,
-          error: translations.unknown_error_with_msg(
+          translations: context.loc,
+          error: context.loc.unknown_error_with_msg(
             'isOrderPaid parameter is missing.',
           ),
         );
@@ -92,9 +93,9 @@ class AppRouter {
       if (!isOrderPaid) {
         return _buildError(
           context: context,
-          translations: translations,
-          error: translations.unknown_error_with_msg(
-            translations.transaction_of_order_not_paid_msg,
+          translations: context.loc,
+          error: context.loc.unknown_error_with_msg(
+            context.loc.transaction_of_order_not_paid_msg,
           ),
         );
       }
@@ -106,8 +107,8 @@ class AppRouter {
       if (order == null) {
         return _buildError(
           context: context,
-          translations: translations,
-          error: translations.no_data,
+          translations: context.loc,
+          error: context.loc.no_data,
         );
       }
       ref
@@ -115,7 +116,7 @@ class AppRouter {
           .setOrderToPaid();
       AdaptiveMessenger.showPlatformMessage(
         context: context,
-        message: translations.order_has_paid_msg,
+        message: context.loc.order_has_paid_msg,
       );
       return platformPageRoute(
         context: context,

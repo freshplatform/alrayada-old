@@ -64,7 +64,6 @@ class OrderItemNotifier extends StateNotifier<Order> {
 
 @immutable
 class OrdersNotifierState {
-
   const OrdersNotifierState({
     this.monthlyTotals = const [],
     this.orders = const [],
@@ -112,7 +111,7 @@ class OrdersNotifier extends StateNotifier<OrdersNotifierState> {
         },
       );
       final orders =
-          response.data?.map(Order.fromJson).toList() ?? [];
+          response.data?.map((e) => Order.fromJson(e)).toList() ?? [];
       if (orders.isNotEmpty) {
         state = state.copyWith(orders: [...orders]);
       }
@@ -199,7 +198,7 @@ class OrdersNotifier extends StateNotifier<OrdersNotifierState> {
         RoutesConstants.ordersRoutes.getStatistics,
       );
       final result =
-          response.data?.map(MonthlyTotal.fromJson).toList() ?? [];
+          response.data?.map((e) => MonthlyTotal.fromJson(e)).toList() ?? [];
       final List<MonthlyTotal> newMonthlyTotals = [];
       newMonthlyTotals.addAll(result);
       state = state.copyWith(monthlyTotals: newMonthlyTotals);

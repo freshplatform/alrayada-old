@@ -6,7 +6,7 @@ import '../../providers/p_user.dart';
 
 @immutable
 class MessageItem extends ConsumerWidget {
-  const MessageItem({required this.message, Key? key}) : super(key: key);
+  const MessageItem({required this.message, super.key});
 
   final ChatMessage message;
 

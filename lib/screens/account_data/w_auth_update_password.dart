@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '/core/locales.dart';
+import '../../extensions/build_context.dart';
 import '/providers/p_user.dart';
 import '/utils/validators/auth_validators.dart';
 import '/widgets/inputs/password/w_password.dart';
@@ -55,7 +55,7 @@ class _AuthUpdatePasswordDialogState
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return PlatformAlertDialog(
       title: Text(translations.update_password),
       material: (context, platform) => MaterialAlertDialogData(

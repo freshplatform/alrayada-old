@@ -12,10 +12,11 @@ fun String.toPattern(): Pattern = Pattern.compile(this)
 fun String.matchPattern(pattern: String): Boolean = pattern.toPattern().matcher(this).matches()
 fun String.isPasswordStrong() = this.matchPattern(PatternsConstants.PASSWORD)
 fun getUserWorkingDirectory(): String {
-    if (!isProductionServer()) {
-        return File(".").canonicalPath
-    }
-    return File(object {}.javaClass.protectionDomain.codeSource.location.toURI().path).parent
+    return System.getProperty("user.dir")
+//    if (!isProductionServer()) {
+//        return File(".").canonicalPath
+//    }
+//    return File(object {}.javaClass.protectionDomain.codeSource.location.toURI().path).parent
 }
 fun String.getFileFromUserWorkingDirectory(): File = File(getUserWorkingDirectory(), this)
 fun String.toJson(): String = Json.encodeToString(String.serializer(), this)

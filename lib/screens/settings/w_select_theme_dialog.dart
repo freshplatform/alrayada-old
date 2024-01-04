@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '/core/locales.dart';
+import '../../extensions/build_context.dart';
 import '/providers/p_theme_mode.dart';
 
 class SelectThemeDialog extends StatelessWidget {
@@ -11,7 +11,7 @@ class SelectThemeDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return PlatformAlertDialog(
       title: Text(translations.theme_mode),
       content: const SelectThemeDialogContent(),
@@ -35,7 +35,7 @@ class SelectThemeDialogContent extends ConsumerWidget {
         .themeModeProvider); // not really needed to watched since the whole app will rebuilt
     final themeModeProvider =
         ref.read(ThemeModeNotifier.themeModeProvider.notifier);
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final children = {
       ThemeMode.dark: Text(translations.dark),
       ThemeMode.light: Text(translations.light),

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart' show Icons;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-import '/core/locales.dart';
+import '../../../../extensions/build_context.dart';
 
 class ConfirmDeleteCartItemDialog extends StatelessWidget {
   const ConfirmDeleteCartItemDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
 
     return PlatformAlertDialog(
       title: Text(translations.remove_cart_item),

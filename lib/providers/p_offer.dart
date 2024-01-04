@@ -20,7 +20,7 @@ class OffersNotififer extends StateNotifier<List<Offer>> {
       final response =
           await _dio.get<List<dynamic>>(RoutesConstants.offersRoutes.getOffers);
       final offers =
-          response.data?.map(Offer.fromJson).toList() ?? [];
+          response.data?.map((e) => Offer.fromJson(e)).toList() ?? [];
       state.addAll(offers);
     } catch (e) {
       return;

@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:linkify_plus/linkify_plus.dart';
 
-import '../../core/locales.dart';
+import '../../extensions/build_context.dart';
 import '../../services/native/url_launcher/s_url_launcher.dart';
 import '../../widgets/adaptive/w_card.dart';
 
@@ -13,7 +13,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return PlatformScaffold(
       appBar: PlatformAppBar(),
       body: SafeArea(

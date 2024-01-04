@@ -3,8 +3,8 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/order/m_order.dart';
 
+import '../../../../extensions/build_context.dart';
 import '../../../../providers/p_order.dart';
-import '/core/locales.dart';
 
 class CancelOrderDialog extends ConsumerStatefulWidget {
   const CancelOrderDialog(this.order, {super.key});
@@ -38,7 +38,7 @@ class _CancelOrderDialogState extends ConsumerState<CancelOrderDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return PlatformAlertDialog(
       material: (context, platform) => MaterialAlertDialogData(
           icon: const Icon(

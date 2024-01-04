@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-import '../../core/locales.dart';
+import '../../../extensions/build_context.dart';
 import '../../utils/constants/constants.dart';
 import '/screens/auth/w_auth_form_inputs.dart';
 
@@ -40,7 +40,7 @@ class _AuthFormState extends State<AuthForm> {
   Widget build(BuildContext context) {
     final materialTheme = Theme.of(context);
     final cupertinoTheme = CupertinoTheme.of(context);
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return Column(
       children: [
         const SizedBox(height: 14),

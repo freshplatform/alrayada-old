@@ -1,52 +1,36 @@
 package net.freshplatform.plugins
 
-import net.freshplatform.routes.user.UserRoutes
-import net.freshplatform.services.secret_variables.SecretVariablesName
-import net.freshplatform.services.secret_variables.SecretVariablesService
-import net.freshplatform.services.security.token.getTokenConfig
-import net.freshplatform.utils.constants.Constants
-import net.freshplatform.utils.extensions.getUserWorkingDirectory
-import net.freshplatform.utils.extensions.request.respondJsonText
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
-import io.ktor.server.plugins.*
 import io.ktor.server.plugins.ratelimit.*
-import io.ktor.server.request.*
+import net.freshplatform.routes.user.UserRoutes
+import net.freshplatform.services.security.token.getTokenConfig
+import net.freshplatform.utils.constants.Constants
+import net.freshplatform.utils.extensions.getUserWorkingDirectory
+import net.freshplatform.utils.extensions.request.respondJsonText
 import java.io.File
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-
-object AppSecurity {
-    val apiKey: String by lazy {
-        SecretVariablesService.require(SecretVariablesName.ApiKey)
-    }
-}
 
 fun Application.configureSecurity() {
     install(RateLimit) {
         global {
             rateLimiter(limit = 50, refillPeriod = 60.seconds)
         }
-        register(RateLimitName(UserRoutes.SIGNIN_ROUTE_NAME)) {
+        register(RateLimitName(UserRoutes.SIGN_IN_ROUTE_NAME)) {
             rateLimiter(limit = 5, refillPeriod = Random.nextInt(from = 2, until = 10).minutes)
         }
-        register(RateLimitName(UserRoutes.SIGNUP_ROUTE_NAME)) {
+        register(RateLimitName(UserRoutes.SIGN_UP_ROUTE_NAME)) {
             rateLimiter(limit = 3, refillPeriod = 30.minutes)
         }
     }
 
     intercept(ApplicationCallPipeline.Call) {
-        // Log every request
-        val remoteHost = call.request.origin.remoteHost
-        val requestPath = call.request.path()
-
-        println("$remoteHost = $requestPath")
-
         // Add lock requests functionality
         val file = File(getUserWorkingDirectory(), Constants.Folders.LOCKED_FILE_NAME)
         if (file.exists()) {

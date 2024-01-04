@@ -1,4 +1,4 @@
-// import '/core/locales.dart';
+// import '../../extensions/build_context.dart';
 // import '/screens/view_orders/w_orders_page.dart';
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@
 //   static const routeName = '/orders';
 //   @override
 //   Widget build(BuildContext context) {
-//     final translations = AppLocalizations.of(context)!;
+//     final translations = context.loc;
 //     return PlatformScaffold(
 //       appBar: PlatformAppBar(
 //         title: Text(translations.orders),

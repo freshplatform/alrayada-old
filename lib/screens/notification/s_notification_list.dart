@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/my_app_notification/m_my_app_notification.dart';
-import '/core/locales.dart';
+import '../../extensions/build_context.dart';
 import '/providers/p_notification.dart';
 import '/widgets/adaptive/messenger.dart';
 import '/widgets/adaptive/w_icon.dart';
@@ -85,7 +85,7 @@ class _NotificationListScreenState
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(translations.notifications),

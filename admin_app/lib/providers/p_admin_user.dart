@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_alrayada/services/networking/dio/dio.dart';
 import 'package:shared_alrayada/shared_alrayada.dart';
 import 'package:shared_alrayada/widgets/pagination/pagination_options/pagniation_options.dart';
 
@@ -91,7 +92,8 @@ class AdminUsersNotifier extends StateNotifier<Object?> {
           'searchQuery': searchQuery,
         },
       );
-      final loadedUsers = response.data?.map(User.fromJson).toList() ?? [];
+      final loadedUsers =
+          response.data?.map((e) => User.fromJson(e)).toList() ?? [];
       return loadedUsers;
     } on DioException {
       rethrow;

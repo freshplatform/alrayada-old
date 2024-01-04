@@ -42,7 +42,8 @@ class CartNotifier extends StateNotifier<List<CartItemData>> {
         data: cartItems.map((e) => e.productId).toList(),
       );
 
-      final products = response.data?.map(Product.fromJson).toList() ?? [];
+      final products =
+          response.data?.map((e) => Product.fromJson(e)).toList() ?? [];
       products.asMap().forEach(
             (index, value) async => modified.add(
               CartItemData(cart: cartItems[index], product: value),

@@ -4,9 +4,9 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/order/m_order.dart';
 
+import '../../../../../extensions/build_context.dart';
 import '../../../../../widgets/adaptive/w_icon.dart';
 import '../w_order_items_table.dart';
-import '/core/locales.dart';
 import '/core/theme_data.dart';
 import '/widgets/adaptive/w_card.dart';
 import 'w_order_steps.dart';
@@ -28,7 +28,7 @@ class OrderDetailsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final order =
         ModalRoute.of(context)?.settings.arguments as Order? ?? _order!;
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
 
     return PlatformScaffold(
       appBar: PlatformAppBar(

@@ -4,7 +4,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/product/m_product.dart';
 
-import '../../core/locales.dart';
+import '../../extensions/build_context.dart';
 import '/widgets/no_data/w_no_data.dart';
 import 'w_product_item.dart';
 
@@ -56,7 +56,7 @@ class _ProductsListState extends State<ProductsList> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final products = getProducts();
     return Column(
       children: [

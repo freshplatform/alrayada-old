@@ -4,8 +4,8 @@ import 'dart:developer' as developer show log;
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/offer/m_offer.dart';
+import 'package:shared_alrayada/services/networking/dio/dio.dart';
 import 'package:shared_alrayada/utils/constants/routes.dart';
-
 
 class OffersNotififer extends StateNotifier<List<Offer>> {
   OffersNotififer() : super([]);
@@ -30,7 +30,7 @@ class OffersNotififer extends StateNotifier<List<Offer>> {
       final response = await _dio.get<List<dynamic>>(
         RoutesConstants.offersRoutes.getOffers,
       );
-      final offers = response.data?.map(Offer.fromJson) ?? [];
+      final offers = response.data?.map((e) => Offer.fromJson(e)) ?? [];
       state = [...state, ...offers];
     } on DioException {
       rethrow;

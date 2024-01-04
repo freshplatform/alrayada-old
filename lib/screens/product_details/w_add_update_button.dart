@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/cart/m_cart.dart';
 import 'package:shared_alrayada/data/product/m_product.dart';
 
+import '../../extensions/build_context.dart';
 import '../../providers/p_cart.dart';
-import '/core/locales.dart';
 import 'w_add_to_cart.dart';
 
 class AddUpdateProductToCartButton extends ConsumerWidget {
@@ -14,7 +14,8 @@ class AddUpdateProductToCartButton extends ConsumerWidget {
 
   static void showEditUpdate({
     required BuildContext context,
-    required Product product, Cart? cart,
+    required Product product,
+    Cart? cart,
   }) =>
       showPlatformModalSheet(
         context: context,
@@ -39,7 +40,7 @@ class AddUpdateProductToCartButton extends ConsumerWidget {
     ref.watch(
         CartNotifier.cartProvider); // watch changes for the cart and rebuilt
     final cartProvider = ref.read(CartNotifier.cartProvider.notifier);
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return FutureBuilder<Cart?>(
       future: cartProvider.getCartItem(product.id),
       builder: (context, snapshot) {

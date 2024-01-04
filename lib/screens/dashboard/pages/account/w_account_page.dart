@@ -9,11 +9,11 @@ import 'package:lottie/lottie.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_alrayada/server/server.dart';
 
+import '../../../../extensions/build_context.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../providers/p_user.dart';
 import '../../../../services/native/url_launcher/s_url_launcher.dart';
 import '../../../account_data/s_account_data.dart';
-import '/core/locales.dart';
 import '/screens/auth/s_auth.dart';
 import '/screens/dashboard/models/m_navigation_item.dart';
 import '/screens/favorites/s_favorites.dart';
@@ -35,7 +35,7 @@ class AccountPage extends ConsumerStatefulWidget implements NavigationData {
   @override
   NavigationItemData Function(BuildContext context, WidgetRef ref)
       get navigationItemData => (context, ref) {
-            final translations = AppLocalizations.of(context)!;
+            final translations = context.loc;
             final actions = <Widget>[];
             actions.add(PlatformIconButton(
               onPressed: () => Navigator.of(context)
@@ -67,7 +67,7 @@ class _AccountPageState extends ConsumerState<AccountPage>
     // TODO: Handle this permissions and push notification thing, fcm or one signal
     await Future.delayed(Duration.zero);
     // final translations =
-    //     await Future.microtask(() => AppLocalizations.of(context)!);
+    //     await Future.microtask(() => context.loc);
     // final messaging = FirebaseMessaging.instance;
     // final notificationPermissionRequest = await messaging.requestPermission(
     //   alert: true,
@@ -140,7 +140,7 @@ class _AccountPageState extends ConsumerState<AccountPage>
   }
 
   void _notLoginMessage() {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     AdaptiveMessenger.showPlatformMessage(
       context: context,
       message: translations.you_need_to_login_first,
@@ -153,7 +153,7 @@ class _AccountPageState extends ConsumerState<AccountPage>
     super.build(context);
     final cupertinoTheme = CupertinoTheme.of(context);
     final materialTheme = Theme.of(context);
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     // final currentUserContainer = ref.read(UserNotifier.userProvider);
 
     final notAuthenticatedItems = Column(

@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../extensions/build_context.dart';
 import '../../services/native/notifications/s_notifications.dart';
 import '../../services/networking/http_clients/dio/s_dio.dart';
 import '../../utils/constants/constants.dart';
 import '../../widgets/adaptive/w_icon.dart';
-import '/core/locales.dart';
 import '/providers/p_cart.dart';
 import '/services/native/connectivity_checker/s_connectivity_checker.dart';
 import '/utils/platform_checker.dart';
@@ -103,8 +103,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   Future<void> handleLimitError() async {
     await Future.delayed(Duration.zero);
-    final translations =
-        await Future.microtask(() => AppLocalizations.of(context)!);
+    final translations = await Future.microtask(() => context.loc);
     DioService.handleServerLimitError(
       () => AdaptiveMessenger.showPlatformMessage(
         context: context,
@@ -116,7 +115,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   List<NavigationItem> get _screens {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return [
       NavigationItem(
         body: HomePage(
@@ -150,7 +149,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             return Badge(
               label: Text(
                 cartItems.length.toString(),
-                textScaleFactor: 1,
+                textScaler: const TextScaler.linear(1), // TODO: Change this
               ),
               // value: provider.itemCount.toString(),
               backgroundColor:

@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/product/m_product.dart';
 import 'package:shared_alrayada/server/server.dart';
 
+import '../../extensions/build_context.dart';
 import '../../gen/assets.gen.dart';
 import '../../widgets/w_image_slider_indicator.dart';
-import '/core/locales.dart';
 import '/screens/product_details/w_wishlist_button.dart';
 import '/services/image/s_image.dart';
 import '/services/native/app_share/s_app_share.dart';
@@ -29,7 +29,7 @@ class ProductDetailsScreen extends ConsumerWidget {
     final cupertinoTheme = CupertinoTheme.of(context);
     final product =
         (ModalRoute.of(context)?.settings.arguments ?? productData) as Product;
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final actions = [
       PlatformIconButton(
         icon: const Icon(Icons.share),

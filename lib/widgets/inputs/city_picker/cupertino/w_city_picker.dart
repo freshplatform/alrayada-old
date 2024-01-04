@@ -4,13 +4,15 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/user/m_user.dart';
 
+import '../../../../extensions/build_context.dart';
 import '../city_picker_utils.dart';
-import '/core/locales.dart';
 import '/providers/p_settings.dart';
 
 class CupertinoCityPickerActionSheet extends ConsumerStatefulWidget {
   const CupertinoCityPickerActionSheet({
-    required this.initialCity, required this.onSelectedItemChanged, super.key,
+    required this.initialCity,
+    required this.onSelectedItemChanged,
+    super.key,
   });
   final IraqGovernorate initialCity;
   final Function(IraqGovernorate selected) onSelectedItemChanged;
@@ -59,7 +61,7 @@ class _CupertinoCityPickerActionSheetState
       FixedExtentScrollController();
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return CupertinoActionSheet(
       actions: [
         SizedBox(

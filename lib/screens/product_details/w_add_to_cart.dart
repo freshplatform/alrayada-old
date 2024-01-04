@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/cart/m_cart.dart';
 import 'package:shared_alrayada/data/product/m_product.dart';
 
-import '/core/locales.dart';
+import '../../extensions/build_context.dart';
 import '/core/theme_data.dart';
 import '/providers/p_cart.dart';
 
@@ -103,7 +103,7 @@ class _AddUpdateProductToCartState
   @override
   Widget build(BuildContext context) {
     final cupertinoTheme = CupertinoTheme.of(context);
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: Card(

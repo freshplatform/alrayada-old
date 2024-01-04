@@ -4,8 +4,8 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/server/server.dart';
 
-import '../../core/locales.dart';
 import '../../data/favorite/s_favorite.dart';
+import '../../extensions/build_context.dart';
 import '../../services/native/package_app_data/package_app_data.dart';
 import '../../services/native/url_launcher/s_url_launcher.dart';
 import '../../widgets/adaptive/w_icon.dart';
@@ -24,7 +24,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settingsProvider =
         ref.read(SettingsNotifier.settingsProvider.notifier);
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(translations.settings),
@@ -51,7 +51,8 @@ class SettingsScreen extends ConsumerWidget {
                           title: translations.animations,
                           description:
                               translations.animations_details_settings_details,
-                          onChanged: settingsProvider.toggleSetAnimationsEnabled,
+                          onChanged:
+                              settingsProvider.toggleSetAnimationsEnabled,
                           value: settingsData.isAnimationsEnabled,
                           leading: const PlatformAdaptiveIcon(
                             iconData: Icons.play_circle_outline,
@@ -80,7 +81,8 @@ class SettingsScreen extends ConsumerWidget {
                           title: translations.confirm_delete_cart_item,
                           description: translations
                               .confirm_delete_cart_item_settings_details,
-                          onChanged: settingsProvider.toggleConfirmDeleteCartItem,
+                          onChanged:
+                              settingsProvider.toggleConfirmDeleteCartItem,
                           value: settingsData.confirmDeleteCartItem,
                           leading: const PlatformAdaptiveIcon(
                             iconData: Icons.delete_outline,
@@ -91,7 +93,8 @@ class SettingsScreen extends ConsumerWidget {
                           title: translations.clear_cart_after_checkout,
                           description: translations
                               .clear_cart_after_checkout_settings_details,
-                          onChanged: settingsProvider.toggleClearCartAfterCheckout,
+                          onChanged:
+                              settingsProvider.toggleClearCartAfterCheckout,
                           value: settingsData.clearCartAfterCheckout,
                           leading: const PlatformAdaptiveIcon(
                             iconData: Icons.clear,
@@ -107,7 +110,8 @@ class SettingsScreen extends ConsumerWidget {
                           title: translations.force_use_scrollable_chart,
                           description: translations
                               .force_use_scrollable_chart_settings_details,
-                          onChanged: settingsProvider.toggleForceUseScrollableChart,
+                          onChanged:
+                              settingsProvider.toggleForceUseScrollableChart,
                           value: settingsData.forceUseScrollableChart,
                           leading: const Icon(
                             Icons.tune,
@@ -117,7 +121,8 @@ class SettingsScreen extends ConsumerWidget {
                           title: translations.prefer_numbers_in_chart_months,
                           description: translations
                               .prefer_numbers_in_chart_months_settings_details,
-                          onChanged: settingsProvider.toggleUseMonthNumberInChart,
+                          onChanged:
+                              settingsProvider.toggleUseMonthNumberInChart,
                           value: settingsData.useMonthNumberInChart,
                           leading: const PlatformAdaptiveIcon(
                             iconData: Icons.insert_chart_outlined,
@@ -250,7 +255,7 @@ class AboutAppListTileState extends State<AboutAppListTile> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return FutureBuilder(
       future: _loadDataFuture,
       builder: (context, snapshot) {

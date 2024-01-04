@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-import '/core/locales.dart';
+import '../../extensions/build_context.dart';
 import '/screens/auth/w_auth_form.dart';
 
 class AuthScreen extends StatelessWidget {
@@ -14,7 +14,7 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final materialTheme = Theme.of(context);
     final cupertinoTheme = CupertinoTheme.of(context);
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return Semantics(
       label: translations.auth_screen,
       child: PlatformScaffold(

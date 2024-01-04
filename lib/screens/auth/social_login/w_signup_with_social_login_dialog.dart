@@ -3,14 +3,17 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/data/user/m_user.dart';
 
+import '../../../extensions/build_context.dart';
 import '../../../providers/p_user.dart';
-import '/core/locales.dart';
+
 import '/data/social_authentication/social_authentication.dart';
 import '/screens/auth/w_auth_form_inputs.dart';
 
 class SignUpWithSocialLoginDialog extends ConsumerStatefulWidget {
   const SignUpWithSocialLoginDialog({
-    required this.provider, required this.socialAuthentication, super.key,
+    required this.provider,
+    required this.socialAuthentication,
+    super.key,
     this.initialLabOwnerName = '',
   });
 
@@ -59,7 +62,7 @@ class _SignUpWithSocialLoginDialogState
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return LayoutBuilder(builder: (context, constraints) {
       final shared = PlatformAlertDialog(
         title: Text(translations.create_new_account),

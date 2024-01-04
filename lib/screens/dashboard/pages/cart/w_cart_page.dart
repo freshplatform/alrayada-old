@@ -6,11 +6,11 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/shared_alrayada.dart';
 
+import '../../../../extensions/build_context.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../providers/p_user.dart';
 import '../../../../widgets/errors/w_internet_error.dart';
 import '../../../product_details/w_add_update_button.dart';
-import '/core/locales.dart';
 import '/providers/p_cart.dart';
 import '/providers/p_settings.dart';
 import '/screens/dashboard/models/m_navigation_item.dart';
@@ -33,7 +33,7 @@ class CartPage extends ConsumerStatefulWidget implements NavigationData {
   @override
   NavigationItemData Function(BuildContext context, WidgetRef ref)
       get navigationItemData => (context, ref) {
-            final translations = AppLocalizations.of(context)!;
+            final translations = context.loc;
             return NavigationItemData(
               actions: [
                 PlatformIconButton(
@@ -86,7 +86,7 @@ class _CartPageState extends ConsumerState<CartPage>
     super.build(context);
     final materialTheme = Theme.of(context);
     final cupertinoTheme = CupertinoTheme.of(context);
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final userContainer = ref.watch(UserNotifier.provider);
     final userProvider = ref.read(UserNotifier.provider.notifier);
     return FutureBuilder<void>(

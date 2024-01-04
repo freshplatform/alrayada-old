@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/shared_alrayada.dart';
@@ -17,10 +18,10 @@ import '/screens/settings/s_settings.dart';
 import '/screens/view_products/s_products.dart';
 import 'core/app_initializer/s_app_initializer.dart';
 import 'core/app_router.dart';
-import 'core/locales.dart';
 import 'core/theme_data.dart';
 import 'core/url_app_configurations/configure_nonweb.dart'
     if (dart.library.html) 'core/url_app_configurations/configure_web.dart';
+import 'l10n/app_localizations.dart';
 import 'screens/account_data/s_account_data.dart';
 import 'screens/dashboard/pages/orders/order_details/s_order_details.dart';
 import 'screens/privacy_policy/s_privacy_policy.dart';

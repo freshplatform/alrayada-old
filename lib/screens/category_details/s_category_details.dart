@@ -5,8 +5,8 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_alrayada/data/product/category/m_product_category.dart';
 
+import '../../extensions/build_context.dart';
 import '../../gen/assets.gen.dart';
-import '/core/locales.dart';
 import '/screens/view_products/s_products.dart';
 import '/services/image/s_image.dart';
 import '/widgets/adaptive/others/w_only_material_hero.dart';
@@ -24,7 +24,7 @@ class CategoryDetailsScreen extends StatelessWidget {
     final cupertinoTheme = CupertinoTheme.of(context);
     final category =
         ModalRoute.of(context)?.settings.arguments as ProductCategory;
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(
@@ -92,7 +92,7 @@ class _CategoriesOrOpenProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final children = category.children;
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     if (children == null) {
       return const Center(
         child: Text('Error from server side, please contact '

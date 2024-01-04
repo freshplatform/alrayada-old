@@ -23,7 +23,7 @@ class ProductCategoriesNotififer extends StateNotifier<List<ProductCategory>> {
         RoutesConstants.productsCategoryRoutes.getCategories,
       );
       final categories =
-          response.data?.map(ProductCategory.fromJson).toList() ?? [];
+          response.data?.map((e) => ProductCategory.fromJson(e)).toList() ?? [];
       state = [...categories];
     } on DioException {
       rethrow;

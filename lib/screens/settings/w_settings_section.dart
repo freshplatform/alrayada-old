@@ -22,14 +22,14 @@ class SettingsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scaleFactor = MediaQuery.textScaleFactorOf(context);
-
     if (isCupertino(context)) {
       return CupertinoListSection.insetGrouped(
         header: Padding(
           padding: EdgeInsetsDirectional.only(
             start: 15,
-            bottom: 5 * scaleFactor,
+            bottom: 5 *
+                MediaQuery.textScalerOf(context)
+                    .scale(5), // TODO: Take a look at this
           ),
           child: DefaultTextStyle(
             style: const TextStyle(
@@ -56,8 +56,8 @@ class SettingsSection extends ConsumerWidget {
       children: [
         Padding(
           padding: EdgeInsetsDirectional.only(
-            top: 24 * scaleFactor,
-            bottom: 10 * scaleFactor,
+            top: MediaQuery.textScalerOf(context).scale(24),
+            bottom: MediaQuery.textScalerOf(context).scale(10),
             start: 24,
             end: 24,
           ),

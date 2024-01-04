@@ -7,8 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_alrayada/data/order/m_order.dart';
 
+import '../../../../extensions/build_context.dart';
 import '../../../../providers/p_order.dart';
-import '/core/locales.dart';
+
 import '/core/theme_data.dart';
 import '/screens/dashboard/pages/orders/w_cancel_order.dart';
 import '/services/native/connectivity_checker/s_connectivity_checker.dart';
@@ -21,7 +22,9 @@ import 'w_order_items_table.dart';
 
 class OrderItemWidget extends ConsumerStatefulWidget {
   const OrderItemWidget({
-    required this.index, required this.order, super.key,
+    required this.index,
+    required this.order,
+    super.key,
   });
 
   final int index;
@@ -60,7 +63,7 @@ class _OrderItemState extends ConsumerState<OrderItemWidget> {
 
   /// First check if the order is paid, then pay
   Future<void> _payOrder(Order order) async {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final hasConnection =
         await ConnectivityCheckerService.instance.hasConnection();
     if (!hasConnection) {
@@ -115,7 +118,7 @@ class _OrderItemState extends ConsumerState<OrderItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final translations = AppLocalizations.of(context)!;
+    final translations = context.loc;
     final order = ref.watch(OrderItemNotifier.orderItemProvider(widget.order));
     final items = [
       Text(
