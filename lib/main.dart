@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/shared_alrayada.dart';
 
 import '/providers/p_settings.dart';
 import '/providers/p_theme_mode.dart';
@@ -21,6 +20,7 @@ import 'core/app_router.dart';
 import 'core/theme_data.dart';
 import 'core/url_app_configurations/configure_nonweb.dart'
     if (dart.library.html) 'core/url_app_configurations/configure_web.dart';
+import 'extensions/build_context.dart';
 import 'l10n/app_localizations.dart';
 import 'screens/account_data/s_account_data.dart';
 import 'screens/dashboard/pages/orders/order_details/s_order_details.dart';
@@ -57,7 +57,9 @@ class MyApp extends StatelessWidget {
           return PlatformTheme(
             builder: (context) => PlatformApp(
               debugShowCheckedModeBanner: false,
-              title: ServerConfigurations.appName,
+              onGenerateTitle: (context) {
+                return context.loc.app_name;
+              },
               cupertino: (context, platform) => CupertinoAppData(
                 theme: MyAppTheme.cupertinoThemeData(
                   themeMode: themeMode,
