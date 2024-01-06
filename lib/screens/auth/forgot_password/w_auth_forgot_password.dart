@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../extensions/build_context.dart';
-import '/providers/p_user.dart';
+import '../../../cubits/auth/auth_cubit.dart';
+import '../../../data/user/auth_exceptions.dart';
+import '../../../utils/extensions/build_context.dart';
 import '/utils/validators/auth_validators.dart';
 
 class ForgotPasswordDialog extends ConsumerStatefulWidget {
@@ -28,31 +30,28 @@ class _ForgotPasswordDialogState extends ConsumerState<ForgotPasswordDialog> {
   Future<void> _submit() async {
     _emailError = '';
     final valid = _formKey.currentState?.validate() ?? false;
+    final navigator = Navigator.of(context);
+    final localizations = context.loc;
     if (!valid) {
       return;
     }
     _formKey.currentState?.save();
     setLoading(true);
-    final error =
-        await ref.read(UserNotifier.provider.notifier).forgotPassword(_email);
-    if (error == null) {
-      Future.microtask(() => Navigator.of(context).pop(true));
-      return;
+    try {
+      await context.read<AuthCubit>().forgotPassword(email: _email);
+      navigator.pop(true);
+    } on AuthException catch (e) {
+      _emailError = e.message
+          .replaceAll(
+            'Email not found. Please check your email address and try again.',
+            localizations.auth_email_not_found,
+          )
+          .replaceAll(
+            'Error while updating forgot password link, Please try again later or contact us.',
+            localizations.unknown_error,
+          );
+      _formKey.currentState?.validate();
     }
-    final translations = await Future.microtask(
-      () => context.loc,
-    );
-
-    _emailError = error
-        .replaceAll(
-          'Email not found. Please check your email address and try again.',
-          translations.auth_email_not_found,
-        )
-        .replaceAll(
-          'Error while updating forgot password link, Please try again later or contact us.',
-          translations.unknown_error,
-        );
-    _formKey.currentState?.validate();
     setLoading(false);
   }
 

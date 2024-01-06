@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart' show InputDecoration;
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../extensions/build_context.dart';
-import '/providers/p_user.dart';
+import '../../cubits/auth/auth_cubit.dart';
+import '../../utils/extensions/build_context.dart';
 import '/services/native/connectivity_checker/s_connectivity_checker.dart';
 
-class DeleteAccount extends ConsumerStatefulWidget {
+class DeleteAccount extends StatefulWidget {
   const DeleteAccount({super.key});
 
   @override
-  ConsumerState<DeleteAccount> createState() => _DeleteAccountState();
+  State<DeleteAccount> createState() => _DeleteAccountState();
 }
 
-class _DeleteAccountState extends ConsumerState<DeleteAccount> {
+class _DeleteAccountState extends State<DeleteAccount> {
   var _isLoading = false;
   late final TextEditingController _confirmationController;
 
@@ -30,21 +30,20 @@ class _DeleteAccountState extends ConsumerState<DeleteAccount> {
 
   Future<void> _deleteAccount() async {
     final navigator = Navigator.of(context);
-    final provider = ref.read(UserNotifier.provider.notifier);
+    final authBloc = context.read<AuthCubit>();
     final hasConnection =
         await ConnectivityCheckerService.instance.hasConnection();
     if (!hasConnection) return;
     setLoading(true);
-    final success = await provider.deleteAccount();
-    if (success) {
+    try {
+      await authBloc.deleteAccount();
       navigator.pop();
       navigator.pop();
-      // Future.microtask(() {
-      //   Navigator.of(context).pop();
-      //   Navigator.of(context).pop();
-      // });
+    } catch (e) {
+      // TODO: Handle errors
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   @override

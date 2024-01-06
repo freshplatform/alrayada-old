@@ -5,7 +5,6 @@ import net.freshplatform.services.security.verification_token.TokenVerification
 interface UserDataSource {
     suspend fun getAllUsers(limit: Int = 10, page: Int = 1, searchQuery: String = ""): List<User>
     suspend fun getUserByEmail(email: String): User?
-//    suspend fun getUserById(userId: String): User?
     suspend fun getUserByUUID(uuid: String): User?
     suspend fun insertUser(user: User): Boolean
     suspend fun deleteUserByUUID(userUUID: String): Boolean

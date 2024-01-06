@@ -4,7 +4,11 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class OptionCheckbox extends StatelessWidget {
   const OptionCheckbox({
-    required this.title, required this.description, required this.onChanged, required this.value, super.key,
+    required this.title,
+    required this.description,
+    required this.onChanged,
+    required this.value,
+    super.key,
     this.leading,
   });
   final String title;

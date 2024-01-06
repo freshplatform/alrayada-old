@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_alrayada/data/product/category/m_product_category.dart';
 
+import '../../data/product/category/m_product_category.dart';
 import '../../gen/assets.gen.dart';
 // import '../../widgets/utils/linear_gradients.dart';
 import '../view_products/s_products.dart';

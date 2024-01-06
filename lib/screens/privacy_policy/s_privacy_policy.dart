@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:linkify_plus/linkify_plus.dart';
 
-import '../../extensions/build_context.dart';
 import '../../services/native/url_launcher/s_url_launcher.dart';
+import '../../utils/extensions/build_context.dart';
 import '../../widgets/adaptive/w_card.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {

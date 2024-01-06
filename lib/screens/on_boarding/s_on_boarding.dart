@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart' show Colors, TextButton;
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../core/theme_data.dart';
-import '../../extensions/build_context.dart';
+import '../../cubits/settings/settings_cubit.dart';
 import '../../gen/assets.gen.dart';
+import '../../utils/extensions/build_context.dart';
 import '../dashboard/s_dashboard.dart';
-import '/providers/p_settings.dart';
 
-class OnBoardingScreen extends ConsumerStatefulWidget {
+class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
 
   static const routeName = '/onBoarding';
 
   @override
-  ConsumerState<OnBoardingScreen> createState() => _OnBoardingScreenState();
+  State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
 
-class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen> {
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
   late final PageController _controller;
   var _isLastPageReached = false;
 
@@ -86,8 +86,6 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     final translations = context.loc;
-    final settingsProvider =
-        ref.read(SettingsNotifier.settingsProvider.notifier);
     final pages = [
       _buildPage(
         color: Colors.blue.shade100,
@@ -164,9 +162,12 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen> {
                       label: translations.get_started,
                       child: PlatformTextButton(
                         onPressed: () async {
-                          await settingsProvider.dontShowOnBoardingScreen();
-                          Future.microtask(() => Navigator.of(context)
-                              .pushReplacementNamed(DashboardScreen.routeName));
+                          final navigator = Navigator.of(context);
+                          context
+                              .read<SettingsCubit>()
+                              .dontShowOnBoardingScreen();
+                          navigator
+                              .pushReplacementNamed(DashboardScreen.routeName);
                         },
                         child: Text(translations.get_started),
                         material: (context, platform) => MaterialTextButtonData(
@@ -199,7 +200,7 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen> {
                                       duration:
                                           const Duration(milliseconds: 300),
                                       curve: Curves.easeIn),
-                              effect: MyAppTheme.isDark(context, ref)
+                              effect: MyAppTheme.isDark(context)
                                   ? const WormEffect(
                                       dotHeight: 20,
                                       dotWidth: 20,

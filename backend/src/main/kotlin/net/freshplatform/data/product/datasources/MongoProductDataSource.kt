@@ -38,7 +38,7 @@ class MongoProductDataSource(
 
         val sortedNonProducts = productCount.toList().sortedByDescending { (_, count) -> count }
         val ids = sortedNonProducts.map { it.first }.toList()
-        return getAllByIds(ids).sortedBy { product -> ids.indexOf(product.id.toString()) }
+        return getAllByIds(ids).sortedBy { product -> ids.indexOf(product.id) }
     }
 
     override suspend fun getAllByCategory(id: String): List<Product> {

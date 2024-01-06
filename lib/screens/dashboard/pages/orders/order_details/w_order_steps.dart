@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_alrayada/data/order/m_order.dart';
 
 import '../../../../../core/theme_data.dart';
+import '../../../../../data/order/m_order.dart';
 import '/screens/dashboard/pages/orders/w_cancel_order.dart';
-import '/utils/others/pair.dart';
 
 class OrderDetailsSteps extends ConsumerWidget {
   const OrderDetailsSteps({required this.order, super.key});
@@ -16,7 +15,7 @@ class OrderDetailsSteps extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Theme(
-      data: MyAppTheme.getAppMaterialTheme(context, ref),
+      data: MyAppTheme.getAppMaterialTheme(context),
       child: Card(
         child: _OrderDetailsSteps(order),
       ),
@@ -88,14 +87,14 @@ class _OrderDetailsStepsState extends State<_OrderDetailsSteps> {
     }
   }
 
-  Pair<String, String> get _orderStatusPair1 {
+  (String status, String message) get _orderStatusPair1 {
     if (order.status == OrderStatus.cancelled) {
-      return const Pair('Cancelled', 'You did cancel the order');
+      return ('Cancelled', 'You did cancel the order');
     }
     if (!order.isPaid) {
-      return const Pair('Created', 'Please pay using chosen payment method');
+      return ('Created', 'Please pay using chosen payment method');
     }
-    return const Pair(
+    return (
       'Ordered',
       'We have received your order, please wait until we review it',
     );
@@ -105,10 +104,10 @@ class _OrderDetailsStepsState extends State<_OrderDetailsSteps> {
   Widget build(BuildContext context) {
     final steps = [
       _buildStep(
-        title: _orderStatusPair1.first,
+        title: _orderStatusPair1.$1,
         titleIcon:
             order.status == OrderStatus.cancelled ? Icons.cancel : Icons.done,
-        subtitle: _orderStatusPair1.second,
+        subtitle: _orderStatusPair1.$2,
         isActive: _currentStep == 0,
         leadingIcon: order.status == OrderStatus.cancelled
             ? Icons.cancel

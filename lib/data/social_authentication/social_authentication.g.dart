@@ -9,12 +9,19 @@ part of 'social_authentication.dart';
 SocialAuthentication _$SocialAuthenticationFromJson(
         Map<String, dynamic> json) =>
     SocialAuthentication(
-      json['signUpUserData'] == null
+      deviceToken: UserDeviceNotificationsToken.fromJson(
+          json['deviceToken'] as Map<String, dynamic>),
+      provider:
+          $enumDecode(_$SocialAuthenticationProviderEnumMap, json['provider']),
+      signUpUserData: json['signUpUserData'] == null
           ? null
           : UserData.fromJson(json['signUpUserData'] as Map<String, dynamic>),
-      UserDeviceNotificationsToken.fromJson(
-          json['deviceToken'] as Map<String, dynamic>),
     );
+
+const _$SocialAuthenticationProviderEnumMap = {
+  SocialAuthenticationProvider.google: 'google',
+  SocialAuthenticationProvider.apple: 'apple',
+};
 
 GoogleAuthentication _$GoogleAuthenticationFromJson(
         Map<String, dynamic> json) =>

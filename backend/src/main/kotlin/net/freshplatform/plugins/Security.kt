@@ -11,6 +11,7 @@ import net.freshplatform.routes.user.UserRoutes
 import net.freshplatform.services.security.token.getTokenConfig
 import net.freshplatform.utils.constants.Constants
 import net.freshplatform.utils.extensions.getUserWorkingDirectory
+import net.freshplatform.utils.extensions.isProductionMode
 import net.freshplatform.utils.extensions.request.respondJsonText
 import java.io.File
 import kotlin.random.Random
@@ -34,7 +35,10 @@ fun Application.configureSecurity() {
         // Add lock requests functionality
         val file = File(getUserWorkingDirectory(), Constants.Folders.LOCKED_FILE_NAME)
         if (file.exists()) {
-            call.respondJsonText(HttpStatusCode.ServiceUnavailable, "Sorry, but the server is unavailable right now, please check back later.")
+            call.respondJsonText(
+                HttpStatusCode.ServiceUnavailable,
+                "Sorry, but the server is unavailable right now, please check back later."
+            )
             finish()
         }
 

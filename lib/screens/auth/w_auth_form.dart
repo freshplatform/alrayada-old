@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-import '../../../extensions/build_context.dart';
 import '../../utils/constants/constants.dart';
+import '../../utils/extensions/build_context.dart';
 import '/screens/auth/w_auth_form_inputs.dart';
 
 class AuthForm extends StatefulWidget {

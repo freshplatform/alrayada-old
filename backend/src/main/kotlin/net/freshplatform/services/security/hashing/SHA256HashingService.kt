@@ -16,7 +16,7 @@ class SHA256HashingService: HashingService {
     }
 
     override fun verify(value: String, saltedHash: SaltedHash): Boolean {
-        if (value.isBlank()) return false
+        if (value.trim().isBlank()) return false
         return DigestUtils.sha256Hex(saltedHash.salt + value) == saltedHash.hash
     }
 }

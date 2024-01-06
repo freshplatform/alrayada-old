@@ -103,7 +103,6 @@ data class UserDeviceNotificationsToken(
     val oneSignal: String = ""
 ) {
     fun validate(): Boolean = when {
-//        fcm.isBlank() -> false
         else -> true
     }
 }
@@ -148,11 +147,11 @@ data class UserData(
             labPhoneNumber = ""
         )
     }
-    fun validate(): String? {
+    fun validate(): Pair<String, String>? {
         return when {
-            !labPhoneNumber.matchPattern(PatternsConstants.PHONE_NUMBER) -> "Please enter a valid lab phone number"
-            !labOwnerPhoneNumber.matchPattern(PatternsConstants.PHONE_NUMBER) -> "Please enter a valid lab owner phone number"
-            labName.isBlank() || labOwnerName.isBlank() -> "Please don't enter any blank fields"
+            !labPhoneNumber.matchPattern(PatternsConstants.PHONE_NUMBER) -> Pair("Please enter a valid lab phone number", "INVALID_PHONE_NUMBER")
+            !labOwnerPhoneNumber.matchPattern(PatternsConstants.PHONE_NUMBER) -> Pair("Please enter a valid lab owner phone number", "INVALID_PHONE_NUMBER")
+            labName.isBlank() || labOwnerName.isBlank() -> Pair("Please don't enter any blank fields", "BLANK_FIELDS")
             else -> null
         }
     }

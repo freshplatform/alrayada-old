@@ -4,12 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../extensions/build_context.dart';
+import '../../cubits/p_cart.dart';
 import '../../services/native/notifications/s_notifications.dart';
 import '../../services/networking/http_clients/dio/s_dio.dart';
 import '../../utils/constants/constants.dart';
+import '../../utils/extensions/build_context.dart';
 import '../../widgets/adaptive/w_icon.dart';
-import '/providers/p_cart.dart';
 import '/services/native/connectivity_checker/s_connectivity_checker.dart';
 import '/utils/platform_checker.dart';
 import '/widgets/adaptive/messenger.dart';
@@ -40,7 +40,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    NotificationsService.instanse.registerNotificationsHandlers(context, ref);
+    NotificationsService.instanse.registerNotificationsHandlers(context);
     // FirebaseMessaging.instance.onTokenRefresh.listen((newFcmToken) =>
     //     Provider.of<UserProvider>(context, listen: false)
     //         .updateDeviceToken(fcmToken: newFcmToken));

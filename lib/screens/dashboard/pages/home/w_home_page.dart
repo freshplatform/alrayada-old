@@ -6,24 +6,25 @@ import 'package:flutter/material.dart'
         CircleAvatar,
         CircularProgressIndicator,
         FloatingActionButton,
-        Icons;
+        Icons,
+        RefreshIndicator;
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shared_alrayada/data/product/m_product.dart';
 
-import '../../../../extensions/build_context.dart';
+import '../../../../cubits/auth/auth_cubit.dart';
+import '../../../../cubits/p_offer.dart';
+import '../../../../cubits/p_order.dart';
+import '../../../../cubits/p_product.dart';
+import '../../../../cubits/p_product_category.dart';
+import '../../../../data/product/m_product.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../widgets/adaptive/refresh_indicator.dart';
+import '../../../../utils/extensions/build_context.dart';
 import '../../../view_products/s_products.dart';
 import '/core/theme_data.dart';
-import '/providers/p_offer.dart';
-import '/providers/p_order.dart';
-import '/providers/p_product.dart';
-import '/providers/p_product_category.dart';
-import '/providers/p_user.dart';
 import '/screens/category_details/s_category_details.dart';
 import '/screens/dashboard/models/m_navigation_item.dart';
 import '/screens/support/s_support.dart';
@@ -83,8 +84,7 @@ class HomePage extends ConsumerStatefulWidget implements NavigationData {
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage>
-    with AutomaticKeepAliveClientMixin {
+class _HomePageState extends ConsumerState<HomePage> {
   Future<void>? _loadStatisticsFuture;
   late Future<void> _loadOffersFuture;
   late Future<List<Product>> _loadBestSellingProductsFuture;
@@ -97,8 +97,9 @@ class _HomePageState extends ConsumerState<HomePage>
   }
 
   Future<void> _initLoadStatisticsFuture() async {
-    final userProvider = ref.read(UserNotifier.provider);
-    if (userProvider != null && _loadStatisticsFuture == null) {
+    final authBloc = context.read<AuthCubit>();
+    if (authBloc.state.userCredential != null &&
+        _loadStatisticsFuture == null) {
       _loadStatisticsFuture =
           ref.read(OrdersNotifier.ordersProvider.notifier).loadStatistics();
       await _loadStatisticsFuture;
@@ -147,10 +148,10 @@ class _HomePageState extends ConsumerState<HomePage>
         ),
       );
 
-  Widget _buildStatistics(AppLocalizations translations) => Consumer(
-        builder: (context, ref, _) {
-          final userContainer = ref.watch(UserNotifier.provider);
-          if (userContainer != null) {
+  Widget _buildStatistics(AppLocalizations translations) =>
+      BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, state) {
+          if (state.userCredential != null) {
             _initLoadStatisticsFuture();
             return FutureBuilder(
               future: _loadStatisticsFuture,
@@ -347,9 +348,8 @@ class _HomePageState extends ConsumerState<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final translations = context.loc;
-    return AdaptiveRefreshIndicator(
+    return RefreshIndicator.adaptive(
       onRefresh: _refreshAll,
       child: Column(
         // padding: const EdgeInsets.all(12),
@@ -371,7 +371,4 @@ class _HomePageState extends ConsumerState<HomePage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

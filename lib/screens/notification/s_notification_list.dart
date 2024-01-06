@@ -7,9 +7,9 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../cubits/p_notification.dart';
 import '../../data/my_app_notification/m_my_app_notification.dart';
-import '../../extensions/build_context.dart';
-import '/providers/p_notification.dart';
+import '../../utils/extensions/build_context.dart';
 import '/widgets/adaptive/messenger.dart';
 import '/widgets/adaptive/w_icon.dart';
 import '/widgets/no_data/w_no_data.dart';

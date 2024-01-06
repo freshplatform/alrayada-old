@@ -1,15 +1,16 @@
 import 'dart:io' show HttpStatus;
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart'
+    show CupertinoIcons, CupertinoTheme, CupertinoFormSection;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/user/auth/m_auth_request_response.dart';
-import 'package:shared_alrayada/data/user/m_user.dart';
 
-import '../../extensions/build_context.dart';
-import '../../providers/p_user.dart';
+import '../../cubits/auth/auth_cubit.dart';
+import '../../data/user/models/m_auth_request.dart';
+import '../../data/user/models/m_user.dart';
+import '../../utils/extensions/build_context.dart';
 import '/screens/auth/forgot_password/w_auth_forgot_password.dart';
 import '/screens/auth/social_login/w_social_login.dart';
 import '/services/native/connectivity_checker/s_connectivity_checker.dart';
@@ -21,7 +22,7 @@ import '/widgets/errors/w_internet_error.dart';
 import '/widgets/inputs/city_picker/w_city_dropdown.dart';
 import '/widgets/inputs/password/w_password.dart';
 
-class AuthFormInputs extends ConsumerStatefulWidget {
+class AuthFormInputs extends StatefulWidget {
   const AuthFormInputs({
     required this.onIsLoginChange,
     super.key,
@@ -30,10 +31,10 @@ class AuthFormInputs extends ConsumerStatefulWidget {
   final Function(bool isLogin) onIsLoginChange;
 
   @override
-  ConsumerState<AuthFormInputs> createState() => _AuthFormInputsState();
+  State<AuthFormInputs> createState() => _AuthFormInputsState();
 }
 
-class _AuthFormInputsState extends ConsumerState<AuthFormInputs> {
+class _AuthFormInputsState extends State<AuthFormInputs> {
   // Form
   final _formKey = GlobalKey<FormState>();
   var _authRequest = const AuthRequest(
@@ -89,21 +90,27 @@ class _AuthFormInputsState extends ConsumerState<AuthFormInputs> {
   ) async {
     final translations = context.loc;
 
-    final userProvider = ref.read(UserNotifier.provider.notifier);
     final hasConnection =
         await ConnectivityCheckerService.instance.hasConnection();
+    if (!context.mounted) {
+      return;
+    }
     if (!hasConnection) {
-      Future.microtask(
-        () => showPlatformDialog(
-          context: context,
-          builder: (context) => const InternetErrorWithoutTryAgainDialog(),
-        ),
+      showPlatformDialog(
+        context: context,
+        builder: (context) => const InternetErrorWithoutTryAgainDialog(),
       );
       return;
     }
     setLoading(true);
     try {
-      await userProvider.authenticateWithEmailAndPassword(isLogin, authRequest);
+      isLogin
+          ? await context
+              .read<AuthCubit>()
+              .signInWithEmailAndPassword(authRequest)
+          : await context
+              .read<AuthCubit>()
+              .signUpWithEmailAndPassword(authRequest);
       _formKey.currentState?.reset();
       if (isLogin) {
         Future.microtask(() async {
@@ -187,12 +194,13 @@ class _AuthFormInputsState extends ConsumerState<AuthFormInputs> {
       if (e.response?.statusCode == HttpStatus.tooManyRequests) {
         message = translations.auth_too_many_failed_attempts;
       }
-      Future.microtask(() => AdaptiveMessenger.showPlatformMessage(
-            context: context,
-            title: translations.error,
-            message: message,
-            useSnackBarInMaterial: false,
-          ));
+      if (!context.mounted) return;
+      AdaptiveMessenger.showPlatformMessage(
+        context: context,
+        title: translations.error,
+        message: message,
+        useSnackBarInMaterial: false,
+      );
     } finally {
       setLoading(false);
     }

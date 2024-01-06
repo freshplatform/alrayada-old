@@ -2,11 +2,10 @@ import 'package:flutter/cupertino.dart'
     show CupertinoColors, CupertinoListSection;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme_data.dart';
 
-class SettingsSection extends ConsumerWidget {
+class SettingsSection extends StatelessWidget {
   const SettingsSection({required this.title, required this.tiles, super.key});
 
   final String title;
@@ -21,7 +20,7 @@ class SettingsSection extends ConsumerWidget {
       );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     if (isCupertino(context)) {
       return CupertinoListSection.insetGrouped(
         header: Padding(
@@ -63,7 +62,7 @@ class SettingsSection extends ConsumerWidget {
           ),
           child: DefaultTextStyle(
             style: TextStyle(
-              color: MyAppTheme.isDark(context, ref)
+              color: MyAppTheme.isDark(context)
                   ? const Color(0xffd3e3fd)
                   : const Color(0xff0b57d0),
             ),

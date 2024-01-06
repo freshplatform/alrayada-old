@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemNavigator;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../extensions/build_context.dart';
-import '../../../providers/p_settings.dart';
+import '../../../cubits/settings/settings_cubit.dart';
+import '../../../utils/extensions/build_context.dart';
 import '../models/m_navigation_item.dart';
 import 'w_material_drawer.dart';
 
@@ -39,8 +40,9 @@ class MaterialScaffoldDashbardState
   void navigateToNewItem(int newIndex) {
     // No need to change the current index since page view
     // will take care of that in onPageChanged
-    final settingsData = ref.read(SettingsNotifier.settingsProvider);
-    if (!settingsData.isAnimationsEnabled) {
+    final isAnimationsEnabled =
+        context.read<SettingsCubit>().state.isAnimationsEnabled;
+    if (!isAnimationsEnabled) {
       _pageViewController.jumpToPage(newIndex);
       return;
     }
@@ -55,9 +57,8 @@ class MaterialScaffoldDashbardState
   Widget build(BuildContext context) {
     final translations = context.loc;
 
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) => showDialog(
+    return WillPopScope(
+      onWillPop: () async => await showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text(translations.close_the_app),

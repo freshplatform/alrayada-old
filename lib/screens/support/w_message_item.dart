@@ -1,32 +1,36 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' show CupertinoTheme;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/chat/m_chat_message.dart';
 
 import '../../core/theme_data.dart';
-import '../../providers/p_user.dart';
+import '../../cubits/auth/auth_cubit.dart';
+import '../../cubits/settings/settings_cubit.dart';
+import '../../data/chat/m_chat_message.dart';
 import '../../widgets/others/w_bubble_background.dart';
-import '/providers/p_settings.dart';
 
 @immutable
-class MessageItem extends ConsumerWidget {
+class MessageItem extends StatelessWidget {
   const MessageItem({required this.message, super.key});
 
   final ChatMessage message;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final settingsProvider = ref.read(SettingsNotifier.settingsProvider);
+  Widget build(BuildContext context) {
+    final settingsState = context.read<SettingsState>();
     // Don't worry, MessageItem is should be called in place where we already check
     // if the user is null and we already handle that cases
-    final user = ref.read(UserNotifier.provider)!.user;
+    final user = context.read<AuthCubit>().state.userCredential?.user;
+    if (user == null) {
+      throw 'The user is required be authenticated.';
+    }
+
     final cupertinoTheme = CupertinoTheme.of(context);
     final materialTheme = Theme.of(context);
     final isMe = message.isMe(user.userId);
     final messageAlignment = isMe ? Alignment.topRight : Alignment.topLeft;
 
-    if (settingsProvider.useClassicMsgBubble) {
+    if (settingsState.useClassicMsgBubble) {
       return Align(
         alignment: messageAlignment,
         child: Container(

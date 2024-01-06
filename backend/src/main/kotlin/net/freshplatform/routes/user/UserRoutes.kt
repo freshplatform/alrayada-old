@@ -1,5 +1,14 @@
 package net.freshplatform.routes.user
 
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.html.*
+import io.ktor.server.plugins.ratelimit.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import kotlinx.html.*
 import net.freshplatform.data.user.User
 import net.freshplatform.data.user.UserData
 import net.freshplatform.data.user.UserDataSource
@@ -14,23 +23,14 @@ import net.freshplatform.services.security.social_authentication.SocialAuthentic
 import net.freshplatform.services.security.token.JwtService
 import net.freshplatform.services.security.verification_token.TokenVerificationService
 import net.freshplatform.services.telegram.TelegramBotService
+import net.freshplatform.utils.ErrorResponseException
 import net.freshplatform.utils.constants.Constants
 import net.freshplatform.utils.constants.PatternsConstants
 import net.freshplatform.utils.extensions.isPasswordStrong
+import net.freshplatform.utils.extensions.isProductionMode
 import net.freshplatform.utils.extensions.isValidEmail
 import net.freshplatform.utils.extensions.request.*
 import net.freshplatform.utils.extensions.webcontent.webContentHeader
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.html.*
-import io.ktor.server.plugins.ratelimit.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import kotlinx.html.*
-import net.freshplatform.routes.RouteBase
-import net.freshplatform.utils.extensions.isProductionMode
 import java.time.LocalDateTime
 
 class UserRoutes(
@@ -42,7 +42,7 @@ class UserRoutes(
     private val mailSenderService: MailSenderService,
     private val socialAuthenticationService: SocialAuthenticationService,
     private val telegramBotService: TelegramBotService
-) : RouteBase() {
+) {
     companion object {
         const val SIGN_IN_ROUTE_NAME = "signIn"
         const val SIGN_UP_ROUTE_NAME = "signUp"
@@ -91,10 +91,9 @@ class UserRoutes(
                         googleSocialRequest.signUpUserData,
                         socialAuthRequest.deviceToken
                     )
-                ) ?: kotlin.run {
-                    call.respondJsonText(HttpStatusCode.BadRequest, "Token of google account is not valid!")
-                    return@post
-                }
+                ) ?: throw ErrorResponseException(
+                    HttpStatusCode.BadRequest, "Token of google account is not valid!", "INVALID_TOKEN"
+                )
             }
 
             SocialAuthentication.Apple::class.simpleName -> {
@@ -109,33 +108,28 @@ class UserRoutes(
                         appleSocialRequest.signUpUserData,
                         socialAuthRequest.deviceToken
                     )
-                ) ?: kotlin.run {
-                    call.respondJsonText(HttpStatusCode.BadRequest, "Token of apple account is not valid!")
-                    return@post
-                }
+                ) ?: throw ErrorResponseException(
+                    HttpStatusCode.BadRequest, "Token of apple account is not valid!", "INVALID_TOKEN"
+                )
             }
 
             else -> {
-                call.respondJsonText(HttpStatusCode.BadRequest, "Unsupported provider.")
-                return@post
+                throw ErrorResponseException(HttpStatusCode.BadRequest, "Unsupported provider.", "UNSUPPORTED")
             }
         }
 
         if (!socialUserData.emailVerified) {
-            call.respondJsonText(HttpStatusCode.BadRequest, "Email is not verified.")
-            return@post
+            throw ErrorResponseException(HttpStatusCode.BadRequest, "Email is not verified.", "EMAIL_NOT_VERIFIED")
         }
 
         var isSignIn = true
         val user = userDataSource.getUserByEmail(socialUserData.email) ?: kotlin.run {
             val signUpUserData = socialAuthRequest.signUpUserData
-            if (signUpUserData == null) {
-                call.respondJsonText(
+                ?: throw ErrorResponseException(
                     HttpStatusCode.BadRequest,
-                    "There is no matching email account, so please provider sign up data to create the account"
+                    "There is no matching email account, so please provider sign up data to create the account",
+                    "USER_NOT_FOUND"
                 )
-                return@post
-            }
             isSignIn = false
             val user = User(
                 email = socialUserData.email,
@@ -175,45 +169,47 @@ class UserRoutes(
         )
     }
 
-    fun signUp() = router.rateLimit(RateLimitName(SIGN_UP_ROUTE_NAME)) {
+    fun signUpWithEmailAndPassword() = router.rateLimit(RateLimitName(SIGN_UP_ROUTE_NAME)) {
         post("/${SIGN_UP_ROUTE_NAME}") {
             call.protectRouteToAppOnly()
+
             val request = call.receiveBodyAs<AuthSignUpRequest>()
             val error = request.validate()
             if (error != null) {
-                call.respondJsonText(HttpStatusCode.BadRequest, error)
-                return@post
+                throw ErrorResponseException(HttpStatusCode.BadRequest, error.first, error.second)
             }
+
             val isEmailUsed = userDataSource.getUserByEmail(request.email) != null
             if (isEmailUsed) {
-                call.respondJsonText(
+                throw ErrorResponseException(
                     HttpStatusCode.Conflict,
-                    "Email already in use. Please use a different email or try logging in."
+                    "Email already in use. Please use a different email or try logging in.",
+                    "EMAIL_USED"
                 )
-                return@post
             }
+
             val password = hashingService.generateSaltedHash(request.password)
+
             val emailVerificationData =
                 tokenVerificationService.generate(User.Companion.TokenVerificationData.EmailVerification.NAME)
+
             val newUser = User(
                 email = request.email.lowercase(),
                 password = password.hash,
                 salt = password.salt,
                 uuid = User.generateUniqueUUID(userDataSource),
                 tokenVerifications = setOf(emailVerificationData),
-//                emailVerificationData = tokenVerificationService.generate(),
-//                forgotPasswordData = null,
                 data = request.userData,
                 createdAt = LocalDateTime.now(),
                 deviceNotificationsToken = request.deviceToken
             )
             val createUserSuccess = userDataSource.insertUser(newUser)
             if (!createUserSuccess) {
-                call.respondJsonText(
+                throw ErrorResponseException(
                     HttpStatusCode.InternalServerError,
-                    "Sorry, there is error while register the account, please try again later"
+                    "Sorry, there is error while register the account, please try again later",
+                    "UNKNOWN_ERROR"
                 )
-                return@post
             }
             val verificationLink =
                 call.generateEmailVerificationLink(
@@ -303,27 +299,32 @@ class UserRoutes(
         }
     }
 
-    fun signIn() = router.rateLimit(RateLimitName(SIGN_IN_ROUTE_NAME)) {
+    fun signInWithEmailAndPassword() = router.rateLimit(RateLimitName(SIGN_IN_ROUTE_NAME)) {
         post("/$SIGN_IN_ROUTE_NAME") {
             call.protectRouteToAppOnly()
             val request = call.receiveBodyAs<AuthSignInRequest>()
             val error = request.validate()
             if (error != null) {
-                call.respondJsonText(HttpStatusCode.BadRequest, error)
-                return@post
+                throw ErrorResponseException(
+                    status = HttpStatusCode.BadRequest,
+                    message = error.first,
+                    code = error.second,
+                )
             }
+
             // Required for security, because social login set the password as empty
             if (request.password.isBlank()) {
-                call.respondJsonText(HttpStatusCode.BadRequest, "Password is blank")
-                return@post
-            }
-            val user = userDataSource.getUserByEmail(request.email) ?: kotlin.run {
-                call.respondJsonText(
-                    HttpStatusCode.NotFound,
-                    "Email not found. Please check your email address and try again."
+                throw ErrorResponseException(
+                    HttpStatusCode.BadRequest,
+                    "Please enter your password",
+                    "PASSWORD_EMPTY",
                 )
-                return@post
             }
+            val user = userDataSource.getUserByEmail(request.email) ?: throw ErrorResponseException(
+                HttpStatusCode.NotFound,
+                "Email not found. Please check your email address and try again.",
+                "USER_NOT_FOUND",
+            )
             val isValidPassword = hashingService.verify(
                 request.password,
                 saltedHash = SaltedHash(
@@ -332,22 +333,24 @@ class UserRoutes(
                 )
             )
             if (!isValidPassword) {
-                call.respondJsonText(HttpStatusCode.Unauthorized, "Incorrect password.")
-                return@post
+                throw ErrorResponseException(
+                    HttpStatusCode.Unauthorized,
+                    "Incorrect password.",
+                    "INVALID_CREDENTIALS",
+                )
             }
             if (!user.emailVerified) {
                 val emailTokenVerification = User.Companion.TokenVerificationData.EmailVerification.find(user)
-                if (emailTokenVerification == null) {
-                    call.respondJsonText(HttpStatusCode.InternalServerError, "This was not supposed to happen")
-                    return@post
-                }
+                    ?: throw ErrorResponseException(HttpStatusCode.InternalServerError, "This was not supposed to happen", "UNKNOWN_ERROR")
                 if (!emailTokenVerification.hasTokenExpired()) {
-                    call.respondJsonText(
+                    throw ErrorResponseException(
                         HttpStatusCode.Gone,
                         "Verification link is already sent," +
-                                " it will expire after ${emailTokenVerification.minutesToExpire()} minutes."
+                                " it will expire after ${emailTokenVerification.minutesToExpire()} minutes.",
+                        "VERIFICATION_LINK_ALREADY_SENT",
+                        mapOf("minutesToExpire" to emailTokenVerification.minutesToExpire().toString())
                     )
-                    return@post
+
                 }
                 val emailVerificationData =
                     tokenVerificationService.generate(User.Companion.TokenVerificationData.EmailVerification.NAME)
@@ -579,8 +582,7 @@ class UserRoutes(
             val userData = call.receiveBodyAs<UserData>()
             val error = userData.validate()
             if (error != null) {
-                call.respondJsonText(HttpStatusCode.BadRequest, error)
-                return@put
+                throw ErrorResponseException(HttpStatusCode.BadRequest, error.first, error.second)
             }
             val user = call.requireAuthenticatedUser()
             val updateSuccess = userDataSource.updateUserDataByUUID(
@@ -630,12 +632,17 @@ class UserRoutes(
             val user = call.requireAuthenticatedUser()
 
             if (currentPassword == newPassword) {
-                call.respondJsonText(HttpStatusCode.BadRequest, "Please choose a new password.")
-                return@patch
+                throw ErrorResponseException(
+                    HttpStatusCode.BadRequest, "Please choose a new password.",
+                    "SAME_PASSWORD"
+                )
             }
             if (!newPassword.isPasswordStrong()) {
                 call.respondJsonText(HttpStatusCode.BadRequest, "Please enter a strong password")
-                return@patch
+                throw ErrorResponseException(
+                    HttpStatusCode.BadRequest, "Please enter a strong password",
+                    "WEAK_PASSWORD"
+                )
             }
             val currentPasswordValid = hashingService.verify(
                 value = currentPassword,
@@ -645,8 +652,11 @@ class UserRoutes(
                 )
             )
             if (!currentPasswordValid) {
-                call.respondJsonText(HttpStatusCode.Unauthorized, "Current password is invalid password.")
-                return@patch
+                throw ErrorResponseException(
+                    HttpStatusCode.Unauthorized,
+                    "Current password is invalid password.",
+                    "INVALID_PASSWORD"
+                )
             }
             val password = hashingService.generateSaltedHash(newPassword)
             val updateSuccess = userDataSource.updateUserPasswordByUUID(
@@ -655,8 +665,11 @@ class UserRoutes(
                 userUUID = user.uuid
             )
             if (!updateSuccess) {
-                call.respondJsonText(HttpStatusCode.InternalServerError, "Error while update the password.")
-                return@patch
+                throw ErrorResponseException(
+                    HttpStatusCode.InternalServerError,
+                    "Error while update the password.",
+                    "UPDATE_ERROR"
+                )
             }
             call.respondJsonText(HttpStatusCode.OK, "Password has been updated.")
         }
@@ -667,26 +680,11 @@ class UserRoutes(
             val user = call.requireAuthenticatedUser()
             val deleteSuccess = userDataSource.deleteUserByUUID(user.stringId())
             if (!deleteSuccess) {
-                call.respondJsonText(HttpStatusCode.InternalServerError, "Error while delete the user")
-                return@delete
+                throw ErrorResponseException(
+                    HttpStatusCode.InternalServerError, "Error while delete the user", "DELETE_ERROR"
+                )
             }
             call.respondJsonText(HttpStatusCode.OK, "User has been successfully deleted!")
         }
-    }
-
-    override fun Route.register() {
-        socialAuthentication()
-        signInWithAppleWeb()
-        signUp()
-        signIn()
-        getUserData()
-        verifyEmailAccount()
-        updateUserData()
-        updateDeviceToken()
-        forgotPassword()
-        resetPasswordForm()
-        resetPassword()
-        updatePassword()
-        deleteSelfAccount()
     }
 }

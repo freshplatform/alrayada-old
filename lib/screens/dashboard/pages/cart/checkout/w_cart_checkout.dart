@@ -1,15 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shared_alrayada/data/order/m_order.dart';
 
-import '../../../../../extensions/build_context.dart';
+import '../../../../../cubits/p_order.dart';
+import '../../../../../cubits/settings/settings_cubit.dart';
+import '../../../../../data/order/m_order.dart';
 import '../../../../../gen/assets.gen.dart';
-import '../../../../../providers/p_order.dart';
 import '../../../../../services/native/connectivity_checker/s_connectivity_checker.dart';
+import '../../../../../utils/extensions/build_context.dart';
 import '../../../../../widgets/errors/w_internet_error.dart';
 import '/screens/dashboard/pages/cart/checkout/w_payment_method.dart';
 import '/widgets/adaptive/messenger.dart';
@@ -50,25 +52,25 @@ class _CheckoutModalDialogState extends ConsumerState<CheckoutModalDialog> {
 
     final hasConnection =
         await ConnectivityCheckerService.instance.hasConnection();
+    if (!context.mounted) {
+      return;
+    }
+    final settingsState = context.read<SettingsCubit>().state;
     if (!hasConnection) {
-      Future.microtask(
-        () => showPlatformDialog(
-          context: context,
-          builder: (context) => const InternetErrorWithoutTryAgainDialog(),
-        ),
+      showPlatformDialog(
+        context: context,
+        builder: (context) => const InternetErrorWithoutTryAgainDialog(),
       );
       return;
     }
 
     setState(() => _isLoading = true);
     try {
-      await Future.microtask(
-        () async => await orderProvider.checkout(
-          context,
-          ref,
-          _orderNotesController.text,
-          _selectedPaymentMethod,
-        ),
+      await orderProvider.checkout(
+        settingsState,
+        ref,
+        _orderNotesController.text,
+        _selectedPaymentMethod,
       );
       await Future.microtask(() {
         Navigator.of(context).pop();

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show immutable;
 
 import '/core/app_initializer/firebase.dart';
+import 'hydrated_bloc.dart';
 import 'onesignal.dart';
 
 @immutable
@@ -14,6 +15,7 @@ class AppInitializerService implements AppInitializer {
   static const instance = AppInitializerService._();
 
   static final List<AppInitializer> _items = [
+    HydratedBlocInitializer(),
     FirebaseInitializer(),
     OneSignalInitializer()
   ];

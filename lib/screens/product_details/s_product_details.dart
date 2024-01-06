@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' show CupertinoTheme;
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/product/m_product.dart';
 import 'package:shared_alrayada/server/server.dart';
 
-import '../../extensions/build_context.dart';
+import '../../data/product/m_product.dart';
 import '../../gen/assets.gen.dart';
+import '../../utils/extensions/build_context.dart';
 import '../../widgets/w_image_slider_indicator.dart';
 import '/screens/product_details/w_wishlist_button.dart';
 import '/services/image/s_image.dart';

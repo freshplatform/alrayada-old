@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/user/m_user.dart';
 
-import '../../../../extensions/build_context.dart';
+import '../../../../cubits/settings/settings_cubit.dart';
+import '../../../../data/user/models/m_user.dart';
+import '../../../../utils/extensions/build_context.dart';
 import '../city_picker_utils.dart';
-import '/providers/p_settings.dart';
 
-class CupertinoCityPickerActionSheet extends ConsumerStatefulWidget {
+class CupertinoCityPickerActionSheet extends StatefulWidget {
   const CupertinoCityPickerActionSheet({
     required this.initialCity,
     required this.onSelectedItemChanged,
@@ -18,12 +18,12 @@ class CupertinoCityPickerActionSheet extends ConsumerStatefulWidget {
   final Function(IraqGovernorate selected) onSelectedItemChanged;
 
   @override
-  ConsumerState<CupertinoCityPickerActionSheet> createState() =>
+  State<CupertinoCityPickerActionSheet> createState() =>
       _CupertinoCityPickerActionSheetState();
 }
 
 class _CupertinoCityPickerActionSheetState
-    extends ConsumerState<CupertinoCityPickerActionSheet> {
+    extends State<CupertinoCityPickerActionSheet> {
   var _isLoading = false;
   var _selectedCity = IraqGovernorate.baghdad;
 
@@ -40,8 +40,9 @@ class _CupertinoCityPickerActionSheetState
     try {
       final index = IraqGovernorate.values
           .indexWhere((element) => element == _selectedCity);
-      final settingsProvider = ref.read(SettingsNotifier.settingsProvider);
-      if (settingsProvider.isAnimationsEnabled) {
+      final isAnimationsEnabled =
+          context.read<SettingsCubit>().state.isAnimationsEnabled;
+      if (isAnimationsEnabled) {
         await scrollController.animateToItem(
           index,
           duration: const Duration(milliseconds: 300),

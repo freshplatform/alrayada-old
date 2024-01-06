@@ -15,7 +15,6 @@ class RoutesConstants {
 }
 
 class ProductsRoutes {
-
   ProductsRoutes._();
   static final root = '${ServerConfigurations.getBaseUrl()}products/';
 
@@ -35,7 +34,6 @@ class ProductsRoutes {
 }
 
 class ProductCategoryRoutes {
-
   ProductCategoryRoutes._();
   static final root =
       '${ServerConfigurations.getBaseUrl()}products/categories/';
@@ -51,7 +49,6 @@ class ProductCategoryRoutes {
 }
 
 class AuthRoutes {
-
   AuthRoutes._();
   static final root = '${ServerConfigurations.getBaseUrl()}authentication/';
 
@@ -70,7 +67,6 @@ class AuthRoutes {
 }
 
 class AuthAdminRoutes {
-
   AuthAdminRoutes._();
   static final root = '${AuthRoutes.root}admin/users/';
   final getUsers = root;
@@ -81,7 +77,6 @@ class AuthAdminRoutes {
 }
 
 class OffersRoutes {
-
   OffersRoutes._();
   static final root = '${ServerConfigurations.getBaseUrl()}offers/';
 
@@ -93,7 +88,6 @@ class OffersRoutes {
 }
 
 class OrdersRoutes {
-
   OrdersRoutes._();
   static final root = '${ServerConfigurations.getBaseUrl()}orders/';
   final getOrders = root;
@@ -105,7 +99,6 @@ class OrdersRoutes {
 }
 
 class OrdersAdminRoutes {
-
   OrdersAdminRoutes._();
   static final root = '${OrdersRoutes.root}admin';
   final deleteOrder = '$root/deleteOrder';
@@ -121,7 +114,6 @@ class AppSupportRoutes {
 }
 
 class AppSupportAdminRoutes {
-
   AppSupportAdminRoutes._();
   static final root = '${AppSupportRoutes.root}admin/';
 

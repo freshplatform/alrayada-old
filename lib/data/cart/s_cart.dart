@@ -1,7 +1,7 @@
-import 'package:shared_alrayada/data/cart/m_cart.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../services/native/database/s_sqlite.dart';
+import 'm_cart.dart';
 
 class CartService {
   CartService._privateConstructor();

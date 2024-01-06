@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shared_alrayada/utils/constants/patterns.dart';
 
-import '../../extensions/build_context.dart';
+import '../extensions/build_context.dart';
 
 abstract class AuthValidators {
   // TODO('Improve the auth validators')

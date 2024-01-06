@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart' show Colors;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/order/m_order.dart';
 
 import '../../../../core/theme_data.dart';
-import '../../../../extensions/build_context.dart';
+import '../../../../data/order/m_order.dart';
+import '../../../../utils/extensions/build_context.dart';
 import '../../../../widgets/w_price.dart';
 
 class OrderItemsTable extends ConsumerWidget {
@@ -20,8 +20,7 @@ class OrderItemsTable extends ConsumerWidget {
       children: [
         TableRow(
           decoration: BoxDecoration(
-            color:
-                MyAppTheme.isDark(context, ref) ? Colors.red : Colors.white54,
+            color: MyAppTheme.isDark(context) ? Colors.red : Colors.white54,
           ),
           children: [
             Padding(

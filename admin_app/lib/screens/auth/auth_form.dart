@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/shared_alrayada.dart';
 
 import '../../providers/p_user.dart';
 import '../../utils/validators/auth.dart';

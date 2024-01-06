@@ -1,6 +1,5 @@
-import 'package:shared_alrayada/data/favorite/m_favorite.dart';
-
 import '../../services/native/database/s_sqlite.dart';
+import 'm_favorite.dart';
 
 class FavoriteService {
   FavoriteService._privateConstructor();

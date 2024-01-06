@@ -38,18 +38,4 @@ class PlatformChecker {
   static bool isWeb() {
     return kIsWeb;
   }
-
-  static bool isCupertino() {
-    if (isAppleProduct()) {
-      return true;
-    }
-    return false;
-  }
-
-  static bool isMaterial() {
-    if (isAppleProduct()) {
-      return false;
-    }
-    return true;
-  }
 }

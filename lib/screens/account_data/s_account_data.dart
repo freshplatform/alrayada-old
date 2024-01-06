@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/user/m_user.dart';
 
-import '../../extensions/build_context.dart';
-import '../../providers/p_user.dart';
+import '../../cubits/auth/auth_cubit.dart';
+import '../../data/user/auth_exceptions.dart';
+import '../../data/user/models/m_user.dart';
+import '../../utils/extensions/build_context.dart';
 import '../../widgets/adaptive/messenger.dart';
 import '../../widgets/adaptive/w_icon.dart';
 import '/screens/account_data/w_delete_account.dart';
@@ -13,16 +14,16 @@ import '/screens/auth/w_auth_form_inputs.dart';
 import '/widgets/buttons/w_outlined_button.dart';
 import 'w_auth_update_password.dart';
 
-class AccountDataScreen extends ConsumerStatefulWidget {
+class AccountDataScreen extends StatefulWidget {
   const AccountDataScreen({super.key});
 
   static const routeName = '/account';
 
   @override
-  ConsumerState<AccountDataScreen> createState() => _AccountDataScreenState();
+  State<AccountDataScreen> createState() => _AccountDataScreenState();
 }
 
-class _AccountDataScreenState extends ConsumerState<AccountDataScreen> {
+class _AccountDataScreenState extends State<AccountDataScreen> {
   var _updateFormUserData = const UserData(
       labOwnerPhoneNumber: '',
       labPhoneNumber: '',
@@ -40,18 +41,24 @@ class _AccountDataScreenState extends ConsumerState<AccountDataScreen> {
     final translations = context.loc;
 
     setLoading(true);
-    final error = await ref
-        .read(UserNotifier.provider.notifier)
-        .updateUserData(_updateFormUserData);
-    setLoading(false);
-    final message = error ?? translations.data_has_been_successfully_updated;
-    Future.microtask(() {
+    try {
+      await context.read<AuthCubit>().updateUserData(_updateFormUserData);
+      if (!context.mounted) return;
       AdaptiveMessenger.showPlatformMessage(
         context: context,
-        message: message,
-        title: error == null ? translations.success : translations.error,
+        message: translations.data_has_been_successfully_updated,
+        title: translations.success,
       );
-    });
+    } on AuthException catch (e) {
+      if (!context.mounted) return;
+      AdaptiveMessenger.showPlatformMessage(
+        context: context,
+        message: e.message,
+        title: translations.error,
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   @override
@@ -74,9 +81,9 @@ class _AccountDataScreenState extends ConsumerState<AccountDataScreen> {
         ],
       ),
       body: SafeArea(
-        child: Consumer(
-          builder: (context, ref, _) {
-            final user = ref.watch(UserNotifier.provider)?.user;
+        child: BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, state) {
+            final user = state.userCredential?.user;
             if (user == null) {
               return Center(
                 child: Text(translations.not_authenticated),

@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shared_alrayada/data/product/category/m_product_category.dart';
 
-import '../../extensions/build_context.dart';
+import '../../data/product/category/m_product_category.dart';
 import '../../gen/assets.gen.dart';
+import '../../utils/extensions/build_context.dart';
 import '/screens/view_products/s_products.dart';
 import '/services/image/s_image.dart';
 import '/widgets/adaptive/others/w_only_material_hero.dart';

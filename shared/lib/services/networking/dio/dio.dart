@@ -3,6 +3,7 @@ import 'dart:io' show HttpStatus;
 
 import 'package:dio/dio.dart'
     show
+        BaseOptions,
         Dio,
         DioException,
         Headers,
@@ -18,7 +19,6 @@ import '../../../server/server.dart';
 import '../../native/connectivity_checker/s_connectivity_checker.dart';
 
 class DioService {
-
   DioService._privateConstructor();
   static Dio? _dio;
   static Interceptor? _authInterceptor;
@@ -93,7 +93,12 @@ class DioService {
 
   /// Create dio for the first time
   static Dio _createDio() {
-    final Dio dio = Dio();
+    final dio = Dio(
+      BaseOptions(
+        receiveTimeout: const Duration(seconds: 3),
+        connectTimeout: const Duration(seconds: 5),
+      ),
+    );
     dio.options.contentType = Headers.jsonContentType;
     dio.options.responseType =
         ResponseType.plain; // json will always make the return type of string

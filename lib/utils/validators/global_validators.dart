@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart' show BuildContext;
 
-import '../../extensions/build_context.dart';
+import '../extensions/build_context.dart';
 
 abstract class GlobalValidators {
   static String? validateIsNotEmpty(String? value, BuildContext context) {

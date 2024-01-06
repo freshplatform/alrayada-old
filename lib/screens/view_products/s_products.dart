@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/product/category/m_product_category.dart';
-import 'package:shared_alrayada/data/product/m_product.dart';
 
+import '../../cubits/p_product.dart';
+import '../../data/product/category/m_product_category.dart';
+import '../../data/product/m_product.dart';
 import '../../widgets/no_data/w_no_data.dart';
-import '/providers/p_product.dart';
 import '/screens/view_products/w_product_list.dart';
 import '/widgets/errors/w_error.dart';
 
@@ -85,8 +85,7 @@ class _ProductsScreenState extends ConsumerState<ProductsScreen> {
 }
 
 class _ProductsScreenBody extends ConsumerStatefulWidget {
-  const _ProductsScreenBody(
-      {required this.data, required this.loadType});
+  const _ProductsScreenBody({required this.data, required this.loadType});
   final dynamic data;
   final _ProductsLoadType loadType;
 

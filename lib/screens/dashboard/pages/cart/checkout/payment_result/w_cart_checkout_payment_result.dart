@@ -1,9 +1,12 @@
 import 'package:flutter/widgets.dart';
-import 'package:shared_alrayada/data/order/m_order.dart';
+
+import '../../../../../../data/order/m_order.dart';
 
 class CartCheckoutPaymentResult extends StatelessWidget {
   const CartCheckoutPaymentResult({
-    required this.order, required this.isOrderPaid, super.key,
+    required this.order,
+    required this.isOrderPaid,
+    super.key,
   });
 
   final Order order;

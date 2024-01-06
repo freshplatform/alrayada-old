@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/product/m_product.dart';
 
 import '../../core/theme_data.dart';
+import '../../cubits/p_product.dart';
+import '../../data/product/m_product.dart';
 import '../../gen/assets.gen.dart';
-import '../../providers/p_product.dart';
 import '../../widgets/w_price.dart';
 import '../product_details/s_product_details.dart';
 import '/services/image/s_image.dart';
@@ -38,7 +38,7 @@ class ProductItem extends ConsumerWidget {
                   padding: EdgeInsets.all(width >= 340 ? 6 : 2),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: MyAppTheme.isDark(context, ref)
+                    color: MyAppTheme.isDark(context)
                         ? const Color(0XFF9E9E9E)
                         : Colors.white,
                     border: Border.all(color: Colors.grey),
@@ -58,7 +58,7 @@ class ProductItem extends ConsumerWidget {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: MyAppTheme.isDark(context, ref)
+                  color: MyAppTheme.isDark(context)
                       ? Colors.black45
                       : Colors.black26,
                   offset: const Offset(5.0, 5.0),
@@ -75,7 +75,7 @@ class ProductItem extends ConsumerWidget {
                   onTap: productProvider.toggleFavoriteItem,
                   child: CircleAvatar(
                     radius: 17,
-                    backgroundColor: MyAppTheme.isDark(context, ref)
+                    backgroundColor: MyAppTheme.isDark(context)
                         ? Colors.black54
                         : Colors.white38,
                     child: Icon(

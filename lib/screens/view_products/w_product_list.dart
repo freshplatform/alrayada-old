@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/product/m_product.dart';
 
-import '../../extensions/build_context.dart';
+import '../../data/product/m_product.dart';
+import '../../utils/extensions/build_context.dart';
 import '/widgets/no_data/w_no_data.dart';
 import 'w_product_item.dart';
 

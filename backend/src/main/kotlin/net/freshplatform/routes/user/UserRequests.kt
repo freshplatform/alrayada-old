@@ -13,13 +13,13 @@ data class AuthSignUpRequest(
     val deviceToken: UserDeviceNotificationsToken,
     val userData: UserData
 ) {
-    fun validate(): String? {
+    fun validate(): Pair<String, String>? {
         return when {
-            !email.isValidEmail() -> "Please enter valid email address"
-            email.length > 100 -> "Email is too long"
-            password.length >= 255 -> "Password is too long"
-            password.length < 8 -> "Password is too short"
-            !password.isPasswordStrong() -> "Please enter a strong password" // TODO("Recheck this on client and server")
+            !email.isValidEmail() -> Pair("Please enter valid email address", "INVALID_EMAIL")
+            email.length > 100 -> Pair("Email is too long", "EMAIL_TOO_LONG")
+            password.length >= 255 -> Pair("Password is too long", "PASSWORD_TOO_LONG")
+            password.length < 8 -> Pair("Password is too short", "PASSWORD_TOO_SHORT")
+            !password.isPasswordStrong() -> Pair("Please enter a strong password", "PASSWORD_WEAK") // TODO: Recheck this on client and server
             userData.validate() != null -> userData.validate()
             else -> null
         }
@@ -32,13 +32,14 @@ data class AuthSignInRequest(
     val password: String,
     val deviceToken: UserDeviceNotificationsToken?,
 ) {
-    fun validate(): String? {
+
+    fun validate(): Pair<String, String>? {
         return when {
-            !email.isValidEmail() -> "Please enter valid email address"
-            password.isBlank() -> "Please enter your password"
-            email.length > 100 -> "Email is too long"
-            password.length >= 50 -> "Password is too long"
-            password.length < 8 -> "Password is too short"
+            !email.isValidEmail() -> Pair("Please enter valid email address", "INVALID_EMAIL")
+            password.isBlank() -> Pair("Please enter your password", "PASSWORD_EMPTY")
+            email.length > 100 -> Pair("Email is too long", "EMAIL_TOO_LONG")
+            password.length >= 50 -> Pair("Password is too long", "PASSWORD_TOO_LONG")
+            password.length < 8 -> Pair("Password is too short", "PASSWORD_TOO_SHORT")
             else -> null
         }
     }

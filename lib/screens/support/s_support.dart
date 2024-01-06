@@ -1,30 +1,30 @@
 import 'dart:io' show SocketException;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_alrayada/server/server.dart';
 import 'package:web_socket_channel/io.dart';
 
-import '../../extensions/build_context.dart';
+import '../../cubits/auth/auth_cubit.dart';
 import '../../utils/constants/routes.dart';
+import '../../utils/extensions/build_context.dart';
 import '../../widgets/errors/w_internet_error.dart';
-import '/providers/p_user.dart';
 import '/screens/support/w_support_messages.dart';
 import '/widgets/errors/w_error.dart';
 import '/widgets/errors/w_not_authenticated.dart';
 import 'w_new_message.dart';
 
-class SupportScreen extends ConsumerStatefulWidget {
+class SupportScreen extends StatefulWidget {
   const SupportScreen({super.key});
 
   static const routeName = '/support';
 
   @override
-  ConsumerState<SupportScreen> createState() => _SupportScreenState();
+  State<SupportScreen> createState() => _SupportScreenState();
 }
 
-class _SupportScreenState extends ConsumerState<SupportScreen> {
+class _SupportScreenState extends State<SupportScreen> {
   IOWebSocketChannel? _channel;
   late Future<void> _connectFuture;
 
@@ -36,7 +36,7 @@ class _SupportScreenState extends ConsumerState<SupportScreen> {
 
   Future<void> _connect() async {
     try {
-      final user = ref.read(UserNotifier.provider);
+      final user = context.read<AuthCubit>().state.userCredential;
       if (user == null) return;
       if (_channel != null) {
         // close previous connections
@@ -44,6 +44,7 @@ class _SupportScreenState extends ConsumerState<SupportScreen> {
       }
       _channel = IOWebSocketChannel.connect(
         RoutesConstants.appSupportRoutes.userChat,
+        // BEcasue we are not using Dio
         headers: {
           'Authorization': 'Bearer ${user.token}',
           'Api': ServerConfigurations.serverApiKey,
@@ -71,8 +72,8 @@ class _SupportScreenState extends ConsumerState<SupportScreen> {
   @override
   Widget build(BuildContext context) {
     final translations = context.loc;
-    final userContainer = ref.read(UserNotifier.provider);
-    if (userContainer == null) {
+    final user = context.read<AuthCubit>().state.userCredential;
+    if (user == null) {
       return PlatformScaffold(
         appBar: PlatformAppBar(
           title: Text(translations.not_authenticated),

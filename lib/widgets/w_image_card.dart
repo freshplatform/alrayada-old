@@ -9,14 +9,16 @@ import '/widgets/utils/linear_gradients.dart';
 
 class ImageCard extends ConsumerWidget {
   const ImageCard({
-    required this.imageProvider, required this.title, super.key,
+    required this.imageProvider,
+    required this.title,
+    super.key,
     this.contentDescription,
     this.height = 200,
     this.gradientPercentage = 0.25,
     this.onTap,
     this.heroTag = '',
     this.howeverEffect = true,
-    this.legacy = false,
+    this.useOld = false,
   });
   final ImageProvider imageProvider;
   final String? contentDescription;
@@ -26,17 +28,17 @@ class ImageCard extends ConsumerWidget {
   final GestureTapCallback? onTap;
   final String heroTag;
   final bool howeverEffect;
-  final bool legacy;
+  final bool useOld;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final materialTheme = Theme.of(context);
     final cupertinoTheme = CupertinoTheme.of(context);
-    if (legacy) {
+    if (useOld) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Theme(
-          data: MyAppTheme.getAppMaterialTheme(context, ref),
+          data: MyAppTheme.getAppMaterialTheme(context),
           child: Card(
             color:
                 isCupertino(context) ? cupertinoTheme.barBackgroundColor : null,
@@ -75,7 +77,7 @@ class ImageCard extends ConsumerWidget {
                         topLeft: Radius.circular(4),
                         topRight: Radius.circular(4),
                       ),
-                      gradient: SimpleLinearGradient(context, ref),
+                      gradient: SimpleLinearGradient(context),
                     ),
                     height: height * gradientPercentage,
                   ),

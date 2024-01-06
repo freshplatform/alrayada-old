@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:web_socket_channel/io.dart';
 
-import '../../extensions/build_context.dart';
-import '/providers/p_settings.dart';
+import '../../cubits/settings/settings_cubit.dart';
+import '../../utils/extensions/build_context.dart';
 
-class NewSupportChatMessage extends ConsumerStatefulWidget {
+class NewSupportChatMessage extends StatefulWidget {
   const NewSupportChatMessage(
       {required this.scrollController, required this.channel, super.key});
 
@@ -15,31 +16,24 @@ class NewSupportChatMessage extends ConsumerStatefulWidget {
   final IOWebSocketChannel channel;
 
   @override
-  ConsumerState<NewSupportChatMessage> createState() =>
-      _NewSupportChatMessageState();
+  State<NewSupportChatMessage> createState() => _NewSupportChatMessageState();
 }
 
-class _NewSupportChatMessageState extends ConsumerState<NewSupportChatMessage> {
-  late final TextEditingController _messageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _messageController = TextEditingController();
-  }
+class _NewSupportChatMessageState extends State<NewSupportChatMessage> {
+  final TextEditingController _messageController = TextEditingController();
 
   ScrollController get scrollController => widget.scrollController;
 
   void _submit() {
     if (_messageController.text.isEmpty) return;
-    final settingsData = ref.read(SettingsNotifier.settingsProvider);
-    if (settingsData.unFocusAfterSendMsg) {
+    final settingsState = context.read<SettingsCubit>().state;
+    if (settingsState.unFocusAfterSendMsg) {
       FocusScope.of(context).unfocus();
     }
     final message = _messageController.text;
     _messageController.clear();
     if (scrollController.positions.isNotEmpty) {
-      if (!settingsData.isAnimationsEnabled) {
+      if (!settingsState.isAnimationsEnabled) {
         scrollController.jumpTo(scrollController.position.maxScrollExtent);
       } else {
         scrollController.animateTo(

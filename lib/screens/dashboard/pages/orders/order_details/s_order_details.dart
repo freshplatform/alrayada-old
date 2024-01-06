@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart' show CupertinoColors, CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/order/m_order.dart';
 
-import '../../../../../extensions/build_context.dart';
+import '../../../../../data/order/m_order.dart';
+import '../../../../../utils/extensions/build_context.dart';
 import '../../../../../widgets/adaptive/w_icon.dart';
 import '../w_order_items_table.dart';
 import '/core/theme_data.dart';
@@ -17,12 +17,6 @@ class OrderDetailsScreen extends ConsumerWidget {
   static const routeName = '/orderDetails';
 
   final Order? _order;
-
-  // IconData _getOrderStatus(Order order) {
-  //   final orderStatus = order.status;
-  //   final paymentMethod = order.paymentMethod;
-  //
-  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -111,7 +105,7 @@ class OrderDetailsScreen extends ConsumerWidget {
                 ),
                 OrderDetailsSteps(order: order),
                 Theme(
-                  data: MyAppTheme.getAppMaterialTheme(context, ref),
+                  data: MyAppTheme.getAppMaterialTheme(context),
                   child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_alrayada/data/order/m_order.dart';
 
-import '../../../../../extensions/build_context.dart';
+import '../../../../../data/order/m_order.dart';
 import '../../../../../gen/assets.gen.dart';
+import '../../../../../utils/extensions/build_context.dart';
 import '../../../../../widgets/adaptive/w_card.dart';
 
 class PaymentMethodsSelector extends StatefulWidget {

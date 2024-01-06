@@ -1,9 +1,9 @@
-import 'dart:convert';
+import 'dart:convert' show jsonDecode;
 
 import 'package:flutter/material.dart';
-import 'package:shared_alrayada/data/chat/m_chat_message.dart';
 import 'package:web_socket_channel/io.dart';
 
+import '../../data/chat/m_chat_message.dart';
 import '/widgets/errors/w_error.dart';
 import 'w_message_item.dart';
 

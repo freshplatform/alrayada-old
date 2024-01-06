@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/order/m_order.dart';
 
-import '../../../../extensions/build_context.dart';
-import '../../../../providers/p_order.dart';
+import '../../../../cubits/p_order.dart';
+import '../../../../data/order/m_order.dart';
+
+import '../../../../utils/extensions/build_context.dart';
 
 class CancelOrderDialog extends ConsumerStatefulWidget {
   const CancelOrderDialog(this.order, {super.key});

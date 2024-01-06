@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../extensions/build_context.dart';
-import '/providers/p_theme_mode.dart';
+import '../../cubits/settings/settings_cubit.dart';
+import '../../utils/extensions/build_context.dart';
 
 class SelectThemeDialog extends StatelessWidget {
   const SelectThemeDialog({super.key});
@@ -25,16 +25,14 @@ class SelectThemeDialog extends StatelessWidget {
   }
 }
 
-class SelectThemeDialogContent extends ConsumerWidget {
+class SelectThemeDialogContent extends StatelessWidget {
   const SelectThemeDialogContent({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     // TODO: This is need to be tested!
-    final themeMode = ref.read(ThemeModeNotifier
-        .themeModeProvider); // not really needed to watched since the whole app will rebuilt
-    final themeModeProvider =
-        ref.read(ThemeModeNotifier.themeModeProvider.notifier);
+    final settingsCubit = context.read<
+        SettingsCubit>(); // not really needed to watched since the whole app will rebuilt
     final translations = context.loc;
     final children = {
       ThemeMode.dark: Text(translations.dark),
@@ -43,23 +41,25 @@ class SelectThemeDialogContent extends ConsumerWidget {
     };
     if (isCupertino(context)) {
       return CupertinoSlidingSegmentedControl<ThemeMode>(
-        groupValue: themeMode,
-        onValueChanged: (value) => themeModeProvider.setThemeMode(value!),
+        groupValue: settingsCubit.state.themeMode,
+        onValueChanged: (value) => settingsCubit.setThemeMode(value!),
         children: children,
       );
     }
     return ToggleButtons(
-      isSelected: children.entries.map((e) => e.key == themeMode).toList(),
+      isSelected: children.entries
+          .map((e) => e.key == settingsCubit.state.themeMode)
+          .toList(),
       onPressed: (index) {
         switch (index) {
           case 0:
-            themeModeProvider.setThemeMode(ThemeMode.dark);
+            settingsCubit.setThemeMode(ThemeMode.dark);
             break;
           case 1:
-            themeModeProvider.setThemeMode(ThemeMode.light);
+            settingsCubit.setThemeMode(ThemeMode.light);
             break;
           case 2:
-            themeModeProvider.setThemeMode(ThemeMode.system);
+            settingsCubit.setThemeMode(ThemeMode.system);
             break;
         }
       },

@@ -5,8 +5,8 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../core/theme_data.dart';
-import '../../extensions/build_context.dart';
 import '../../gen/assets.gen.dart';
+import '../../utils/extensions/build_context.dart';
 
 class NotFoundScreen extends StatelessWidget {
   const NotFoundScreen({super.key});

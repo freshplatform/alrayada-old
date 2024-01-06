@@ -1,15 +1,14 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_alrayada/data/order/m_order.dart';
 
-import '../../../../extensions/build_context.dart';
-import '../../../../providers/p_order.dart';
-
+import '../../../../cubits/p_order.dart';
+import '../../../../data/order/m_order.dart';
+import '../../../../utils/extensions/build_context.dart';
 import '/core/theme_data.dart';
 import '/screens/dashboard/pages/orders/w_cancel_order.dart';
 import '/services/native/connectivity_checker/s_connectivity_checker.dart';
@@ -297,7 +296,7 @@ class _OrderItemState extends ConsumerState<OrderItemWidget> {
             ),
           ),
           body: SizedBox(
-            height: min(order.items.length * 20 + 120, 250),
+            height: math.min(order.items.length * 20 + 120, 250),
             child: ListView(
               children: items,
             ),

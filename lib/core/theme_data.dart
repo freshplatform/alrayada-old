@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '/providers/p_theme_mode.dart';
 
 /// I could make base theme which have all the shared things
 /// Between light and dark theme, but I will make it simple for now
@@ -48,22 +45,15 @@ class MyAppTheme {
     );
   }
 
-  static ThemeData getAppMaterialTheme(BuildContext context, WidgetRef ref) {
-    if (isDark(context, ref)) {
+  static ThemeData getAppMaterialTheme(BuildContext context) {
+    if (isDark(context)) {
       return materialDarkTheme();
     }
     return materialLightTheme();
   }
 
-  static bool isDark(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.read(ThemeModeNotifier.themeModeProvider);
-    if (themeMode == ThemeMode.system) {
-      return View.of(context).platformDispatcher.platformBrightness ==
-          Brightness.dark;
-      // return SchedulerBinding.instance.window.platformBrightness ==
-      //     Brightness.dark;
-    }
-    return themeMode == ThemeMode.dark;
+  static bool isDark(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark;
   }
 
   static CupertinoThemeData cupertinoThemeData(

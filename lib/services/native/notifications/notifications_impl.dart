@@ -1,10 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:shared_alrayada/data/user/m_user.dart';
 
-import '../../../data/my_app_notification/m_my_app_notification.dart';
-import '../../../providers/p_notification.dart';
+import '../../../data/user/models/m_user.dart';
 import '../../../utils/platform_checker.dart';
 import '../../../widgets/adaptive/messenger.dart';
 import 'notifications.dart';
@@ -12,11 +10,12 @@ import 'notifications.dart';
 class NotificationsImpl extends Notifications {
   @override
   Future<UserDeviceNotificationsToken> getUserDeviceToken() async {
-    const newFirebaseToken = '';
+    var newFirebaseToken = '';
     var newOneSignalToken = '';
 
     try {
       newOneSignalToken = OneSignal.User.pushSubscription.id ?? '';
+      newFirebaseToken = await FirebaseMessaging.instance.getToken() ?? '';
     } catch (e) {
       // Error
     }
@@ -28,8 +27,7 @@ class NotificationsImpl extends Notifications {
   }
 
   @override
-  Future<void> registerNotificationsHandlers(
-      BuildContext context, WidgetRef ref) async {
+  Future<void> registerNotificationsHandlers(BuildContext context) async {
     if (!PlatformChecker.isMobileDevice()) return;
 
     OneSignal.Notifications.addClickListener((event) {
@@ -40,11 +38,12 @@ class NotificationsImpl extends Notifications {
     });
     void foregroundWillDisplayListener(OSNotificationWillDisplayEvent event) {
       print('On foreground will display listener');
-      ref
-          .read(NotificationNotififer.notificationsProvider.notifier)
-          .addNotificationFromPushNotification(
-            MyAppNotification.fromOneSignal(event.notification),
-          );
+      // TODO: Replace this with bloc
+      // conte
+      //     .read(NotificationNotififer.notificationsProvider.notifier)
+      //     .addNotificationFromPushNotification(
+      //       MyAppNotification.fromOneSignal(event.notification),
+      //     );
       AdaptiveMessenger.showPlatformMessage(
           context: context,
           message: '${event.notification.title} in foreground');

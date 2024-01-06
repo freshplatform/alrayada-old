@@ -3,9 +3,9 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../extensions/build_context.dart';
+import '../../cubits/p_favorite.dart';
 import '../../gen/assets.gen.dart';
-import '/providers/p_favorite.dart';
+import '../../utils/extensions/build_context.dart';
 import '/screens/view_products/w_product_list.dart';
 
 class FavoritesScreen extends ConsumerWidget {

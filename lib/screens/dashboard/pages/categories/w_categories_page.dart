@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../cubits/p_product_category.dart';
 import '../../../../gen/assets.gen.dart';
-import '../../../../providers/p_product_category.dart';
 import '../../../../widgets/w_image_card.dart';
 import '/screens/category_details/s_category_details.dart';
 import '/screens/dashboard/models/m_navigation_item.dart';
@@ -27,12 +27,8 @@ class CategoriesPage extends ConsumerStatefulWidget implements NavigationData {
           };
 }
 
-class _CategoriesPageState extends ConsumerState<CategoriesPage>
-    with AutomaticKeepAliveClientMixin {
+class _CategoriesPageState extends ConsumerState<CategoriesPage> {
   late Future<void> _loadCategoriesFuture;
-
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -50,7 +46,6 @@ class _CategoriesPageState extends ConsumerState<CategoriesPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return FutureBuilder(
       future: _loadCategoriesFuture,
       builder: (context, snapshot) {

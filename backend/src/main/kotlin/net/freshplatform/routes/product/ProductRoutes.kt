@@ -2,7 +2,7 @@ package net.freshplatform.routes.product
 
 import net.freshplatform.data.product.ProductDataSource
 import net.freshplatform.data.product.ProductRequest
-import net.freshplatform.data.product.category.ProductCategoryDataSource
+import net.freshplatform.data.product_category.ProductCategoryDataSource
 import net.freshplatform.utils.extensions.createFile
 import net.freshplatform.utils.extensions.deleteAwait
 import net.freshplatform.utils.extensions.request.*

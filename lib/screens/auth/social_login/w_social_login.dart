@@ -2,32 +2,33 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_alrayada/data/user/m_user.dart';
 import 'package:shared_alrayada/server/server.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-import '../../../extensions/build_context.dart';
+import '../../../cubits/auth/auth_cubit.dart';
+import '../../../data/user/auth_exceptions.dart';
+import '../../../data/user/models/m_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../utils/constants/routes.dart';
+import '../../../utils/extensions/build_context.dart';
 import '/core/theme_data.dart';
 import '/data/social_authentication/social_authentication.dart';
-import '/providers/p_user.dart';
 import '/screens/auth/social_login/w_signup_with_social_login_dialog.dart';
 import '/widgets/adaptive/messenger.dart';
 import '/widgets/buttons/w_outlined_button.dart';
 
-class SocialLogin extends ConsumerStatefulWidget {
+class SocialLogin extends StatefulWidget {
   const SocialLogin({super.key});
 
   @override
-  ConsumerState<SocialLogin> createState() => _SocialLoginState();
+  State<SocialLogin> createState() => _SocialLoginState();
 }
 
-class _SocialLoginState extends ConsumerState<SocialLogin> {
+class _SocialLoginState extends State<SocialLogin> {
   var _isLoading = false;
 
   late final GoogleSignIn _googleSignIn;
@@ -47,41 +48,9 @@ class _SocialLoginState extends ConsumerState<SocialLogin> {
 
   void setLoading(bool newValue) => setState(() => _isLoading = newValue);
 
-  Future<void> _authenticateWithFacebook() async {
-    final translationa = context.loc;
-    AdaptiveMessenger.showPlatformMessage(
-      context: context,
-      message: translationa.sorry_this_feature_is_not_available_at_the_moment,
-    );
-    // final facebookAuth = FacebookAuth.instance;
-    // final AccessToken? accessToken = await facebookAuth.accessToken;
-    // if (accessToken != null) {
-    //   await facebookAuth.logOut();
-    // }
-    // final result = await facebookAuth.login(
-    //   permissions: [
-    //     'email',
-    //     'public_profile',
-    //     // 'first_name',
-    //     // 'last_name',
-    //     // 'middle_name',
-    //     // 'name',
-    //     // 'picture',
-    //     // 'short_name'
-    //   ],
-    // );
-    // // or FacebookAuth.i.login()
-    // // if (result.status == LoginStatus.success) {
-    // //   final accessToken = result.accessToken!;
-    // //   print(accessToken.toJson());
-    // // } else {
-    // //   print(result.status);
-    // //   print(result.message);
-    // // }
-  }
-
   Future<void> _authenticateWithApple() async {
     final translations = context.loc;
+    final authCubit = context.read<AuthCubit>();
     try {
       setLoading(true);
 
@@ -109,7 +78,7 @@ class _SocialLoginState extends ConsumerState<SocialLogin> {
         final tokenParts = identityToken.split('.');
         final encodedPayload = tokenParts[1];
 
-        // Add padding if necessary (bug solved thanks to ChatGpt)
+        // Add padding if necessary (bug solved thanks to ChatGpt not by me)
         final paddingLength = 4 - (encodedPayload.length % 4);
         final paddedPayload = encodedPayload + ('=' * paddingLength);
 
@@ -119,20 +88,20 @@ class _SocialLoginState extends ConsumerState<SocialLogin> {
       }
       final appleSocialAuth = AppleAuthentication(identityToken, userIdentifier,
           null, const UserDeviceNotificationsToken());
-      final error = await ref
-          .read(UserNotifier.provider.notifier)
-          .authenticateWithSocialLogin(
-            appleSocialAuth,
-            AppleAuthentication.provider,
-          );
-      handleError(
-        error: error,
-        socialAuth: appleSocialAuth,
-        provider: AppleAuthentication.provider,
-        initialLabOwnerName: credential.givenName != null
-            ? ('${credential.givenName} ${credential.familyName}')
-            : '',
-      );
+      try {
+        await authCubit.authenticateWithSocialLogin(
+          appleSocialAuth,
+        );
+      } on AuthException catch (e) {
+        handleError(
+          error: e.message,
+          socialAuth: appleSocialAuth,
+          provider: appleSocialAuth.provider.value,
+          initialLabOwnerName: credential.givenName != null
+              ? ('${credential.givenName} ${credential.familyName}')
+              : '',
+        );
+      }
     } on SignInWithAppleAuthorizationException catch (error) {
       if (error.code == AuthorizationErrorCode.canceled) return;
       if (error.code == AuthorizationErrorCode.unknown) return;
@@ -155,6 +124,7 @@ class _SocialLoginState extends ConsumerState<SocialLogin> {
   }
 
   Future<void> _authenticateWithGoogle() async {
+    final authBloc = context.read<AuthCubit>();
     setLoading(true);
     if (await _googleSignIn.isSignedIn()) {
       await _googleSignIn.signOut();
@@ -167,19 +137,20 @@ class _SocialLoginState extends ConsumerState<SocialLogin> {
     }
     final googleSocialAuth = GoogleAuthentication(
         auth.idToken!, null, const UserDeviceNotificationsToken());
-    final error = await ref
-        .read(UserNotifier.provider.notifier)
-        .authenticateWithSocialLogin(
-          googleSocialAuth,
-          GoogleAuthentication.provider,
-        );
-    setLoading(false);
-    handleError(
-      socialAuth: googleSocialAuth,
-      provider: GoogleAuthentication.provider,
-      error: error,
-      initialLabOwnerName: googleResponse?.displayName ?? '',
-    );
+    try {
+      await authBloc.authenticateWithSocialLogin(
+        googleSocialAuth,
+      );
+    } on AuthException catch (e) {
+      handleError(
+        socialAuth: googleSocialAuth,
+        provider: googleSocialAuth.provider.value,
+        error: e.message,
+        initialLabOwnerName: googleResponse?.displayName ?? '',
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   void handleError({
@@ -193,29 +164,27 @@ class _SocialLoginState extends ConsumerState<SocialLogin> {
     if (error != null) {
       if (error ==
           'There is no matching email account, so please provider sign up data to create the account') {
-        Future.microtask(() => showPlatformDialog(
-              context: context,
-              builder: (context) {
-                return SignUpWithSocialLoginDialog(
-                  initialLabOwnerName: initialLabOwnerName,
-                  provider: provider,
-                  socialAuthentication: socialAuth,
-                );
-              },
-            ));
+        showPlatformDialog(
+          context: context,
+          builder: (context) {
+            return SignUpWithSocialLoginDialog(
+              initialLabOwnerName: initialLabOwnerName,
+              provider: provider,
+              socialAuthentication: socialAuth,
+            );
+          },
+        );
         return;
       }
-      Future.microtask(
-        () => AdaptiveMessenger.showPlatformMessage(
-          context: context,
-          message: error.toString(),
-          title: translations.error,
-          useSnackBarInMaterial: false,
-        ),
+      AdaptiveMessenger.showPlatformMessage(
+        context: context,
+        message: error.toString(),
+        title: translations.error,
+        useSnackBarInMaterial: false,
       );
       return;
     }
-    Future.microtask(() => Navigator.of(context).pop());
+    Navigator.of(context).pop();
   }
 
   @override
@@ -238,8 +207,7 @@ class _SocialLoginState extends ConsumerState<SocialLogin> {
           height: fontSize,
           child: CustomPaint(
             painter: AppleLogoPainter(
-              color:
-                  MyAppTheme.isDark(context, ref) ? Colors.white : Colors.black,
+              color: MyAppTheme.isDark(context) ? Colors.white : Colors.black,
             ),
           ),
         ),
@@ -307,20 +275,20 @@ class _SocialLoginState extends ConsumerState<SocialLogin> {
                     ],
                   ),
                   const SizedBox(height: 4),
-                  Semantics(
-                    label: translations.login_with_facebook,
-                    child: SizedBox(
-                      width: 100,
-                      child: AdaptiveOutlinedButton(
-                        onPressed: _authenticateWithFacebook,
-                        child: SvgPicture.asset(
-                          Assets.svg.icFacebook.path,
-                          width: 24,
-                          semanticsLabel: translations.facebook_icon,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Semantics(
+                  //   label: translations.login_with_facebook,
+                  //   child: SizedBox(
+                  //     width: 100,
+                  //     child: AdaptiveOutlinedButton(
+                  //       onPressed: _authenticateWithFacebook,
+                  //       child: SvgPicture.asset(
+                  //         Assets.svg.icFacebook.path,
+                  //         width: 24,
+                  //         semanticsLabel: translations.facebook_icon,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               )
             : const CircularProgressIndicator.adaptive(),

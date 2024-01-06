@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../cubits/auth/auth_cubit.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../providers/p_user.dart';
+
 import '../../account_data/s_account_data.dart';
 import '../../settings/s_settings.dart';
 import '../../support/s_support.dart';
 
 import '/screens/notification/s_notification_list.dart';
 
-class DashboardMaterialDrawer extends ConsumerWidget {
+class DashboardMaterialDrawer extends StatelessWidget {
   const DashboardMaterialDrawer({required this.translations, super.key});
 
   final AppLocalizations translations;
 
   Widget _buildItem({
     required BuildContext context,
-    required WidgetRef ref,
     required IconData leadingIcon,
     required String title,
     required VoidCallback onTap,
@@ -33,8 +33,9 @@ class DashboardMaterialDrawer extends ConsumerWidget {
           onTap: () {
             Navigator.of(context).pop();
             if (authenticationRequired) {
-              final userContainer = ref.read(UserNotifier.provider);
-              if (userContainer == null) {
+              final userAuthenticatedResponse =
+                  context.read<AuthCubit>().state.userCredential;
+              if (userAuthenticatedResponse == null) {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -50,15 +51,14 @@ class DashboardMaterialDrawer extends ConsumerWidget {
       );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Drawer(
-      semanticLabel: 'Drawer',
       child: ListView(
         padding: EdgeInsets.zero, // Required
         children: [
-          Consumer(
-            builder: (context, provider, _) {
-              final user = ref.watch(UserNotifier.provider);
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, state) {
+              final user = state.userCredential;
               return UserAccountsDrawerHeader(
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
@@ -78,7 +78,6 @@ class DashboardMaterialDrawer extends ConsumerWidget {
           ),
           _buildItem(
             context: context,
-            ref: ref,
             leadingIcon: Icons.message,
             title: translations.support,
             onTap: () =>
@@ -87,7 +86,6 @@ class DashboardMaterialDrawer extends ConsumerWidget {
           ),
           _buildItem(
             context: context,
-            ref: ref,
             leadingIcon: Icons.account_circle,
             title: translations.account,
             onTap: () =>
@@ -96,7 +94,6 @@ class DashboardMaterialDrawer extends ConsumerWidget {
           ),
           _buildItem(
             context: context,
-            ref: ref,
             leadingIcon: Icons.notifications,
             title: translations.notifications,
             onTap: () => Navigator.of(context)
@@ -105,7 +102,6 @@ class DashboardMaterialDrawer extends ConsumerWidget {
           ),
           _buildItem(
             context: context,
-            ref: ref,
             leadingIcon: Icons.settings,
             title: translations.settings,
             onTap: () =>

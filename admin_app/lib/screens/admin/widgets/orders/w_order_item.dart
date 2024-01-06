@@ -38,6 +38,7 @@ class _OrderItemState extends ConsumerState<OrderItem> {
       case OrderStatus.pending:
         return Colors.grey;
     }
+    return null;
   }
 
   @override

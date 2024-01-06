@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:shared_alrayada/data/user/m_user.dart';
 
-import '../../../extensions/build_context.dart';
+import '../../../data/user/models/m_user.dart';
+import '../../../utils/extensions/build_context.dart';
 import '/data/location/s_location.dart';
 import '/widgets/inputs/city_picker/cupertino/w_city_picker.dart';
 import 'city_picker_utils.dart';

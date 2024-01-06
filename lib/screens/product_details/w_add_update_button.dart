@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/cart/m_cart.dart';
-import 'package:shared_alrayada/data/product/m_product.dart';
 
-import '../../extensions/build_context.dart';
-import '../../providers/p_cart.dart';
+import '../../cubits/p_cart.dart';
+import '../../data/cart/m_cart.dart';
+import '../../data/product/m_product.dart';
+
+import '../../utils/extensions/build_context.dart';
 import 'w_add_to_cart.dart';
 
 class AddUpdateProductToCartButton extends ConsumerWidget {

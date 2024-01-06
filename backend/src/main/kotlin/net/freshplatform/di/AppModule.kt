@@ -8,8 +8,8 @@ import net.freshplatform.data.offer.datasources.MongoOfferDataSource
 import net.freshplatform.data.order.OrderDataSource
 import net.freshplatform.data.order.datasources.MongoOrderDataSource
 import net.freshplatform.data.product.ProductDataSource
-import net.freshplatform.data.product.category.ProductCategoryDataSource
-import net.freshplatform.data.product.category.datasources.MongoProductCategoryDataSource
+import net.freshplatform.data.product_category.ProductCategoryDataSource
+import net.freshplatform.data.product_category.datasources.MongoProductCategoryDataSource
 import net.freshplatform.data.product.datasources.MongoProductDataSource
 import net.freshplatform.data.user.UserDataSource
 import net.freshplatform.data.user.datasources.MongoUserDataSource

@@ -3,13 +3,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../extensions/build_context.dart';
+import '../cubits/p_order.dart';
+import '../cubits/p_product.dart';
 import '../l10n/app_localizations.dart';
-import '../providers/p_order.dart';
-import '../providers/p_product.dart';
+
 import '../screens/dashboard/pages/orders/order_details/s_order_details.dart';
 import '../screens/not_found/s_not_found.dart';
 import '../screens/product_details/s_product_details.dart';
+import '../utils/extensions/build_context.dart';
 import '../widgets/adaptive/messenger.dart';
 import '../widgets/errors/w_error.dart';
 import '../widgets/no_data/w_no_data.dart';

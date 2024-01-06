@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' show Icons;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-import '../../../../extensions/build_context.dart';
+import '../../../../utils/extensions/build_context.dart';
 
 class ConfirmDeleteCartItemDialog extends StatelessWidget {
   const ConfirmDeleteCartItemDialog({super.key});

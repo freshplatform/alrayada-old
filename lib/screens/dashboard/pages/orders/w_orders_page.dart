@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart' show DioException, DioExceptionType;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/user/auth/m_auth_request_response.dart';
 
-import '../../../../providers/p_order.dart';
-import '../../../../providers/p_user.dart';
+import '../../../../cubits/auth/auth_cubit.dart';
+import '../../../../cubits/p_order.dart';
+import '../../../../data/user/models/m_auth_credential.dart';
+
 import '../../../../widgets/errors/w_error.dart';
 import '../../models/m_navigation_item.dart';
 import '/widgets/errors/w_internet_error.dart';
@@ -25,8 +27,7 @@ class OrdersPage extends ConsumerStatefulWidget implements NavigationData {
           };
 }
 
-class _OrdersPageState extends ConsumerState<OrdersPage>
-    with AutomaticKeepAliveClientMixin {
+class _OrdersPageState extends ConsumerState<OrdersPage> {
   late final ScrollController _scrollController;
   Future<void>? _loadOrdersFuture;
 
@@ -41,15 +42,15 @@ class _OrdersPageState extends ConsumerState<OrdersPage>
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
 
-    final userContainer = ref.read(UserNotifier.provider);
-    if (userContainer != null) {
+    final userCredential = context.read<AuthCubit>();
+    if (userCredential.state.userCredential != null) {
       _loadOrdersFuture = ref
           .read(OrdersNotifier.ordersProvider.notifier)
           .loadOrders(page: _page);
     }
   }
 
-  void _onUserProviderUpdate(UserAuthenticatedResponse? userContainer) {
+  void _onUserProviderUpdate(UserCredential? userContainer) {
     if (userContainer == null) {
       return;
     }
@@ -132,43 +133,40 @@ class _OrdersPageState extends ConsumerState<OrdersPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    ref.listen(UserNotifier.provider, (previous, next) {
-      _onUserProviderUpdate(next);
-    });
-    return Consumer(builder: (context, ref, _) {
-      final userContainer = ref.watch(UserNotifier.provider);
-      if (userContainer == null) {
-        return const NotAuthenticatedError();
-      }
-      if (!_isInitLoading) {
-        return list;
-      }
-      return FutureBuilder(
-        future: _loadOrdersFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator.adaptive());
-          }
-          if (snapshot.hasError) {
-            if (snapshot.error is DioException) {
-              final dioException = snapshot.error as DioException;
-              if (dioException.type == DioExceptionType.connectionError) {
-                return InternetErrorWithTryAgain(onTryAgain: _refresh);
-              }
-            }
-            return ErrorWithTryAgain(onTryAgain: _refresh);
-          }
-          if (!snapshot.hasData) {
-            return ErrorWithTryAgain(onTryAgain: _refresh);
-          }
-          _isInitLoading = false;
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        _onUserProviderUpdate(state.userCredential);
+      },
+      builder: (context, state) {
+        if (state.userCredential == null) {
+          return const NotAuthenticatedError();
+        }
+        if (!_isInitLoading) {
           return list;
-        },
-      );
-    });
+        }
+        return FutureBuilder(
+          future: _loadOrdersFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator.adaptive());
+            }
+            if (snapshot.hasError) {
+              if (snapshot.error is DioException) {
+                final dioException = snapshot.error as DioException;
+                if (dioException.type == DioExceptionType.connectionError) {
+                  return InternetErrorWithTryAgain(onTryAgain: _refresh);
+                }
+              }
+              return ErrorWithTryAgain(onTryAgain: _refresh);
+            }
+            if (!snapshot.hasData) {
+              return ErrorWithTryAgain(onTryAgain: _refresh);
+            }
+            _isInitLoading = false;
+            return list;
+          },
+        );
+      },
+    );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

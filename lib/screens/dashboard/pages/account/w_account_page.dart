@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -9,10 +10,10 @@ import 'package:lottie/lottie.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_alrayada/server/server.dart';
 
-import '../../../../extensions/build_context.dart';
+import '../../../../cubits/auth/auth_cubit.dart';
 import '../../../../gen/assets.gen.dart';
-import '../../../../providers/p_user.dart';
 import '../../../../services/native/url_launcher/s_url_launcher.dart';
+import '../../../../utils/extensions/build_context.dart';
 import '../../../account_data/s_account_data.dart';
 import '/screens/auth/s_auth.dart';
 import '/screens/dashboard/models/m_navigation_item.dart';
@@ -21,16 +22,15 @@ import '/screens/notification/s_notification_list.dart';
 import '/screens/settings/s_settings.dart';
 import '/services/image/s_image.dart';
 import '/widgets/adaptive/messenger.dart';
-import '/widgets/adaptive/refresh_indicator.dart';
 import '/widgets/adaptive/w_icon.dart';
 import 'w_social_media_dialog.dart';
 
-class AccountPage extends ConsumerStatefulWidget implements NavigationData {
+class AccountPage extends StatefulWidget implements NavigationData {
   const AccountPage({required this.navigate, super.key});
   final Function(int newIndex) navigate;
 
   @override
-  ConsumerState<AccountPage> createState() => _AccountPageState();
+  State<AccountPage> createState() => _AccountPageState();
 
   @override
   NavigationItemData Function(BuildContext context, WidgetRef ref)
@@ -51,15 +51,13 @@ class AccountPage extends ConsumerStatefulWidget implements NavigationData {
           };
 }
 
-class _AccountPageState extends ConsumerState<AccountPage>
-    with AutomaticKeepAliveClientMixin {
+class _AccountPageState extends State<AccountPage> {
   late final Future<void> _loadUserFromServerFuture;
 
   @override
   void initState() {
     super.initState();
-    _loadUserFromServerFuture =
-        ref.read(UserNotifier.provider.notifier).loadUserFromServer();
+    _loadUserFromServerFuture = context.read<AuthCubit>().fetchUser();
     requestNotificationPermission();
   }
 
@@ -150,11 +148,9 @@ class _AccountPageState extends ConsumerState<AccountPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final cupertinoTheme = CupertinoTheme.of(context);
     final materialTheme = Theme.of(context);
     final translations = context.loc;
-    // final currentUserContainer = ref.read(UserNotifier.userProvider);
 
     final notAuthenticatedItems = Column(
       children: [
@@ -171,20 +167,16 @@ class _AccountPageState extends ConsumerState<AccountPage>
       ],
     );
 
-    return AdaptiveRefreshIndicator(
+    return RefreshIndicator.adaptive(
       onRefresh: () async {
-        final userContainer = ref.read(UserNotifier.provider);
-        if (userContainer != null) {
-          final userProvider = ref.read(UserNotifier.provider.notifier);
-          await userProvider.loadUserFromServer();
-        }
+        final user = context.read<AuthCubit>();
+        await user.fetchUser();
       },
       child: Column(
         children: [
-          Consumer(
-            builder: (context, ref, _) {
-              final userContainer = ref.watch(UserNotifier.provider);
-              final user = userContainer?.user;
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, state) {
+              final user = state.userCredential?.user;
               final userData = user?.data;
               return Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -279,26 +271,15 @@ class _AccountPageState extends ConsumerState<AccountPage>
               if (snapshot.hasError) {
                 return notAuthenticatedItems;
               }
-              return Consumer(
-                builder: (context, ref, _) {
-                  final newUserContainer = ref.watch(UserNotifier.provider);
-                  // if (newUserContainer == null &&
-                  //     currentUserContainer != null) {
-                  //   // TODO("Translate this too")
-                  //   // AdaptiveMessenger.showPlatformMessage(
-                  //   //   context: context,
-                  //   //   message: 'Your account exists no more!',
-                  //   //   title: 'Not authenticated!',
-                  //   //   useSnackBarInMaterial: false,
-                  //   // );
-                  // }
+              return BlocBuilder<AuthCubit, AuthState>(
+                builder: (context, state) {
                   return Column(
                     children: [
                       _buildAccountItem(
                         title: translations.account_data,
                         subTitle: translations.update_all_of_your_data,
                         iconData: PlatformIcons(context).accountCircleSolid,
-                        onTap: newUserContainer != null
+                        onTap: state.userCredential != null
                             ? () => Navigator.of(context)
                                 .pushNamed(AccountDataScreen.routeName)
                             : _notLoginMessage,
@@ -345,11 +326,10 @@ class _AccountPageState extends ConsumerState<AccountPage>
             onTap: () =>
                 Navigator.of(context).pushNamed(SettingsScreen.routeName),
           ),
-          Consumer(
-            builder: (context, ref, _) {
-              final userContainer = ref.watch(UserNotifier.provider);
-              final userProvider = ref.read(UserNotifier.provider.notifier);
-              if (userContainer == null) {
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, state) {
+              final authCubit = context.read<AuthCubit>();
+              if (state.userCredential == null) {
                 return const SizedBox.shrink(); // no logout button
               }
               return Padding(
@@ -358,11 +338,11 @@ class _AccountPageState extends ConsumerState<AccountPage>
                   width: double.infinity,
                   child: PlatformWidget(
                     cupertino: (context, platform) => CupertinoButton(
-                      onPressed: () => userProvider.logout(byUser: true),
+                      onPressed: () => authCubit.logout(),
                       child: Text(translations.logout),
                     ),
                     material: (context, platform) => OutlinedButton(
-                      onPressed: () => userProvider.logout(byUser: true),
+                      onPressed: () => authCubit.logout(),
                       child: Text(translations.logout),
                     ),
                   ),
@@ -374,7 +354,4 @@ class _AccountPageState extends ConsumerState<AccountPage>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

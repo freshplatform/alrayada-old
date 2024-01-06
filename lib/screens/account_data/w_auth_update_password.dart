@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../extensions/build_context.dart';
-import '/providers/p_user.dart';
+import '../../cubits/auth/auth_cubit.dart';
+import '../../data/user/auth_exceptions.dart';
+import '../../utils/extensions/build_context.dart';
+
 import '/utils/validators/auth_validators.dart';
 import '/widgets/inputs/password/w_password.dart';
 
@@ -31,24 +34,23 @@ class _AuthUpdatePasswordDialogState
   Future<void> _submit() async {
     _passwordError = '';
     final valid = _formKey.currentState?.validate() ?? false;
+    final navigator = Navigator.of(context);
     if (!valid) {
       return;
     }
     _formKey.currentState!.save();
     setLoading(true);
-    final error =
-        await ref.read(UserNotifier.provider.notifier).updateUserPassword(
-              currentPassword: _currentPassword,
-              newPassword: _newPassword,
-            );
-    if (error == null) {
-      Future.microtask(() => Navigator.of(context).pop(true));
-      return;
+    try {
+      await context.read<AuthCubit>().updateUserPassword(
+            currentPassword: _currentPassword,
+            newPassword: _newPassword,
+          );
+      navigator.pop(true);
+    } on AuthException catch (e) {
+      _passwordError = e.message;
+      _formKey.currentState?.validate();
+      setLoading(false);
     }
-
-    _passwordError = error;
-    _formKey.currentState?.validate();
-    setLoading(false);
   }
 
   final _newPasswordFocusNode = FocusNode();

@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:shared_alrayada/data/user/m_user.dart';
 
 import '../../../data/location/s_location.dart';
-import '../../../extensions/build_context.dart';
+import '../../../data/user/models/m_user.dart';
+import '../../../utils/extensions/build_context.dart';
 
 class CityPickerUtils {
   const CityPickerUtils._();

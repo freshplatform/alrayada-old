@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/product/m_product.dart';
 
-import '../../extensions/build_context.dart';
-import '../../providers/p_product.dart';
+import '../../cubits/p_product.dart';
+import '../../data/product/m_product.dart';
+import '../../utils/extensions/build_context.dart';
 
 class WishlistProductButton extends ConsumerStatefulWidget {
   const WishlistProductButton({required this.product, super.key});

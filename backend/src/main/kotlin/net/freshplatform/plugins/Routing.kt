@@ -15,7 +15,7 @@ import net.freshplatform.data.chat.ChatDataSource
 import net.freshplatform.data.offer.OfferDataSource
 import net.freshplatform.data.order.OrderDataSource
 import net.freshplatform.data.product.ProductDataSource
-import net.freshplatform.data.product.category.ProductCategoryDataSource
+import net.freshplatform.data.product_category.ProductCategoryDataSource
 import net.freshplatform.data.user.UserDataSource
 import net.freshplatform.routes.chat.ChatRoomController
 import net.freshplatform.routes.chat.ChatRoutes
@@ -36,6 +36,8 @@ import net.freshplatform.services.security.social_authentication.SocialAuthentic
 import net.freshplatform.services.security.token.JwtService
 import net.freshplatform.services.security.verification_token.TokenVerificationService
 import net.freshplatform.services.telegram.TelegramBotService
+import net.freshplatform.utils.ErrorResponse
+import net.freshplatform.utils.ErrorResponseException
 import net.freshplatform.utils.constants.Constants
 import net.freshplatform.utils.constants.DomainVerificationConstants
 import net.freshplatform.utils.extensions.getFileFromUserWorkingDirectory
@@ -87,6 +89,16 @@ fun Application.configureRouting() {
         }
         exception<RequestBodyMustValidException> { call, cause ->
             call.respondJsonText(HttpStatusCode.BadRequest, cause.message.toString())
+        }
+        exception<ErrorResponseException> { call, cause ->
+            call.respond(
+                message = ErrorResponse(
+                    message = cause.message,
+                    code = cause.code,
+                    data = cause.data
+                ),
+                status = cause.status,
+            )
         }
     }
     install(Resources)
@@ -153,8 +165,8 @@ fun Application.configureRouting() {
                 )
                 userRoutes.socialAuthentication()
                 userRoutes.signInWithAppleWeb()
-                userRoutes.signUp()
-                userRoutes.signIn()
+                userRoutes.signUpWithEmailAndPassword()
+                userRoutes.signInWithEmailAndPassword()
                 userRoutes.getUserData()
                 userRoutes.verifyEmailAccount()
                 userRoutes.updateUserData()

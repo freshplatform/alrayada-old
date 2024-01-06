@@ -5,7 +5,9 @@ import '/core/theme_data.dart';
 
 class ProductPrice extends ConsumerWidget {
   const ProductPrice({
-    required this.originalPrice, required this.discountPercentage, super.key,
+    required this.originalPrice,
+    required this.discountPercentage,
+    super.key,
     this.textAlign = TextAlign.center,
     this.textScaleFactor = 1.0,
     this.haveGradient = true,
@@ -38,7 +40,7 @@ class ProductPrice extends ConsumerWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
                     color: (haveGradient ||
-                            (!haveGradient && MyAppTheme.isDark(context, ref)))
+                            (!haveGradient && MyAppTheme.isDark(context)))
                         ? Colors.white
                         : null,
                   ),
@@ -55,7 +57,8 @@ class ProductPrice extends ConsumerWidget {
                   ),
                 ),
               ],
-            ), textScaler: TextScaler.linear(textScaleFactor),
+            ),
+            textScaler: TextScaler.linear(textScaleFactor),
           )
         : Text(
             '${salePrice.toStringAsFixed(1).replaceFirst('.0', '')}\$',
@@ -64,7 +67,7 @@ class ProductPrice extends ConsumerWidget {
               fontWeight: FontWeight.bold,
               fontSize: 15,
               color: (haveGradient ||
-                      (!haveGradient && MyAppTheme.isDark(context, ref)))
+                      (!haveGradient && MyAppTheme.isDark(context)))
                   ? Colors.white
                   : null,
             ),

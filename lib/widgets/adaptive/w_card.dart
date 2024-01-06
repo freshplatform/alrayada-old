@@ -7,7 +7,8 @@ import '../../core/theme_data.dart';
 
 class AdaptiveCard extends ConsumerWidget {
   const AdaptiveCard({
-    required this.child, super.key,
+    required this.child,
+    super.key,
     this.margin,
   });
 
@@ -25,7 +26,7 @@ class AdaptiveCard extends ConsumerWidget {
       cupertino: (context, platform) => Container(
         margin: margin,
         decoration: BoxDecoration(
-          color: MyAppTheme.isDark(context, ref)
+          color: MyAppTheme.isDark(context)
               ? CupertinoColors.tertiaryLabel
               : CupertinoColors.tertiarySystemGroupedBackground,
           borderRadius: BorderRadius.circular(12.0),

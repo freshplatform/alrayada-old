@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../extensions/build_context.dart';
 import '../../gen/assets.gen.dart';
+import '../../utils/extensions/build_context.dart';
 import '/screens/auth/s_auth.dart';
 
 class NotAuthenticatedError extends StatelessWidget {

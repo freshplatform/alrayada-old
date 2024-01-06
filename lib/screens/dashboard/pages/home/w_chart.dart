@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-import 'package:shared_alrayada/data/monthly_total/m_monthly_total.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
 import '../../../../core/theme_data.dart';
-import '../../../../providers/p_settings.dart';
+import '../../../../cubits/settings/settings_cubit.dart';
+import '../../../../data/monthly_total/m_monthly_total.dart';
 import '/screens/dashboard/pages/categories/m_chart.dart';
 
-class ChartList extends ConsumerWidget {
+class ChartList extends StatelessWidget {
   const ChartList({required this.monthlyTotals, super.key});
 
   final List<MonthlyTotal> monthlyTotals;
@@ -22,7 +22,7 @@ class ChartList extends ConsumerWidget {
     return amount / totalSpending;
   }
 
-  List<ChartItem> getCharts(SettingsData settingsData) {
+  List<ChartItem> getCharts(SettingsState settingsState) {
     final now = DateTime.now();
     return List.generate(
       12,
@@ -41,7 +41,7 @@ class ChartList extends ConsumerWidget {
         } catch (e) {
           // Do nothing
         }
-        final text = settingsData.useMonthNumberInChart
+        final text = settingsState.useMonthNumberInChart
             ? date.month.toString()
             : DateFormat.MMMM().format(date).substring(0, 3);
         return ChartItem(
@@ -54,9 +54,11 @@ class ChartList extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final settingsData = ref.watch(SettingsNotifier.settingsProvider);
-    final charts = getCharts(settingsData);
+  Widget build(BuildContext context) {
+    final settingsState = context.read<SettingsCubit>().state;
+    final charts = getCharts(
+      settingsState,
+    );
     return Card(
       color: isCupertino(context)
           ? CupertinoTheme.of(context).barBackgroundColor
@@ -90,7 +92,7 @@ class ChartList extends ConsumerWidget {
                       ))
                   .toList(),
             );
-            if (settingsData.forceUseScrollableChart) {
+            if (settingsState.forceUseScrollableChart) {
               return scrollable;
             }
             if (constraints.maxWidth >= 345) {
@@ -98,7 +100,7 @@ class ChartList extends ConsumerWidget {
             }
             // TODO("Improve chart")
             // See if the month number in smaller devices are good
-            if (settingsData.useMonthNumberInChart) {
+            if (settingsState.useMonthNumberInChart) {
               return nonScrollable;
             }
             // scrollable

@@ -1,15 +1,13 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/user/m_user.dart';
-
-import '../../../extensions/build_context.dart';
-import '../../../providers/p_user.dart';
-
+import '../../../cubits/auth/auth_cubit.dart';
+import '../../../data/user/models/m_user.dart';
+import '../../../utils/extensions/build_context.dart';
 import '/data/social_authentication/social_authentication.dart';
 import '/screens/auth/w_auth_form_inputs.dart';
 
-class SignUpWithSocialLoginDialog extends ConsumerStatefulWidget {
+class SignUpWithSocialLoginDialog extends StatefulWidget {
   const SignUpWithSocialLoginDialog({
     required this.provider,
     required this.socialAuthentication,
@@ -22,12 +20,12 @@ class SignUpWithSocialLoginDialog extends ConsumerStatefulWidget {
   final SocialAuthentication socialAuthentication;
 
   @override
-  ConsumerState<SignUpWithSocialLoginDialog> createState() =>
+  State<SignUpWithSocialLoginDialog> createState() =>
       _SignUpWithSocialLoginDialogState();
 }
 
 class _SignUpWithSocialLoginDialogState
-    extends ConsumerState<SignUpWithSocialLoginDialog> {
+    extends State<SignUpWithSocialLoginDialog> {
   var _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   var _userData = const UserData(
@@ -41,22 +39,23 @@ class _SignUpWithSocialLoginDialogState
 
   Future<void> _signUp() async {
     final valid = _formKey.currentState?.validate() ?? false;
+    final navigator = Navigator.of(context);
     if (!valid) return;
-    _formKey.currentState!.save();
-    final userProvider = ref.read(UserNotifier.provider.notifier);
-    setLoading(true);
-    widget.socialAuthentication.signUpUserData = _userData;
-    final error = await userProvider.authenticateWithSocialLogin(
-      widget.socialAuthentication,
-      widget.provider,
-    );
-    setLoading(false);
-    if (error == null) {
-      Future.microtask(() {
-        Navigator.of(context).pop(); // close the dialog
-        Navigator.of(context).pop(); // get back to dashboard
-      });
-      return;
+    _formKey.currentState?.save();
+
+    final authBloc = context.read<AuthCubit>();
+
+    try {
+      setLoading(true);
+      await authBloc.authenticateWithSocialLogin(
+        widget.socialAuthentication.copyWith(signUpUserData: _userData),
+      );
+      navigator.pop(); // close the dialog
+      navigator.pop(); // get back to dashboard
+    } catch (e) {
+      // TODO: Handle errors
+    } finally {
+      setLoading(false);
     }
   }
 

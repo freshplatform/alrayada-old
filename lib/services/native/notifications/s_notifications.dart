@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart' show BuildContext;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_alrayada/data/user/m_user.dart';
 
+import '../../../data/user/models/m_user.dart';
 import 'notifications.dart';
 import 'notifications_impl.dart';
 
@@ -14,7 +13,6 @@ class NotificationsService implements NotificationsImpl {
       _service.getUserDeviceToken();
 
   @override
-  Future<void> registerNotificationsHandlers(
-          BuildContext context, WidgetRef ref) =>
-      _service.registerNotificationsHandlers(context, ref);
+  Future<void> registerNotificationsHandlers(BuildContext context) =>
+      _service.registerNotificationsHandlers(context);
 }
